@@ -1,0 +1,430 @@
+// ============================================================================
+// GLOBAL STYLES AND RESETS
+// ============================================================================
+// Base HTML/body styles, CSS custom properties for runtime theme switching,
+// scrollbar styling, and accessibility utilities.
+// ============================================================================
+
+@use 'tokens' as *;
+
+// ============================================================================
+// CSS Reset
+// ============================================================================
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: $bg-app;
+  color: $text-primary;
+  font-family: $font-sans;
+  font-size: $text-base;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#app {
+  height: 100%;
+}
+
+// ============================================================================
+// CSS Custom Properties (Dark Theme - Default)
+// ============================================================================
+
+:root,
+html.dark {
+  // Background colors
+  --cat-bg-app: #{$bg-app};
+  --cat-bg-sidebar: #{$bg-sidebar};
+  --cat-bg-surface: #{$bg-surface};
+  --cat-bg-elevated: #{$bg-elevated};
+  --cat-bg-input: #{$bg-input};
+  --cat-bg-hover: #{$bg-hover};
+  --cat-bg-active: #{$bg-active};
+  --cat-bg-selected: #{$bg-selected};
+
+  // Border colors
+  --cat-border-default: #{$border-default};
+  --cat-border-subtle: #{$border-subtle};
+  --cat-border-focus: #{$border-focus};
+
+  // Text colors
+  --cat-text-primary: #{$text-primary};
+  --cat-text-secondary: #{$text-secondary};
+  --cat-text-tertiary: #{$text-tertiary};
+  --cat-text-disabled: #{$text-disabled};
+
+  // Accent colors
+  --cat-accent-primary: #{$accent-primary};
+
+  // Shadows
+  --cat-shadow-sm: #{$shadow-sm};
+  --cat-shadow-md: #{$shadow-md};
+  --cat-shadow-lg: #{$shadow-lg};
+  --cat-shadow-xl: #{$shadow-xl};
+  --cat-shadow-glow: #{$shadow-glow};
+  --cat-shadow-focus: #{$shadow-focus};
+
+  // Gradients
+  --cat-gradient-accent: #{$gradient-accent};
+
+  // Spacing
+  --cat-space-1: #{$space-1};
+  --cat-space-2: #{$space-2};
+  --cat-space-3: #{$space-3};
+  --cat-space-4: #{$space-4};
+  --cat-space-5: #{$space-5};
+  --cat-space-6: #{$space-6};
+  --cat-space-8: #{$space-8};
+  --cat-space-10: #{$space-10};
+  --cat-space-12: #{$space-12};
+  --cat-space-16: #{$space-16};
+
+  // Border radius
+  --cat-radius-sm: #{$radius-sm};
+  --cat-radius-md: #{$radius-md};
+  --cat-radius-lg: #{$radius-lg};
+  --cat-radius-xl: #{$radius-xl};
+  --cat-radius-full: #{$radius-full};
+
+  // Transitions
+  --cat-transition-fast: #{$transition-fast};
+  --cat-transition-base: #{$transition-base};
+  --cat-transition-slow: #{$transition-slow};
+
+  // Typography
+  --cat-font-sans: #{$font-sans};
+  --cat-font-mono: #{$font-mono};
+  --cat-text-base: #{$text-base};
+  --cat-text-sm: #{$text-sm};
+  --cat-text-xs: #{$text-xs};
+  --cat-text-lg: #{$text-lg};
+  --cat-text-xl: #{$text-xl};
+  --cat-weight-normal: #{$weight-normal};
+  --cat-weight-medium: #{$weight-medium};
+  --cat-weight-semibold: #{$weight-semibold};
+  --cat-weight-bold: #{$weight-bold};
+
+  // Layout
+  --cat-sidebar-width: #{$sidebar-width};
+  --cat-sidebar-collapsed: #{$sidebar-collapsed};
+  --cat-topbar-height: #{$topbar-height};
+  --cat-statusbar-height: #{$statusbar-height};
+
+  // Z-index
+  --cat-z-base: #{$z-base};
+  --cat-z-dropdown: #{$z-dropdown};
+  --cat-z-sticky: #{$z-sticky};
+  --cat-z-overlay: #{$z-overlay};
+  --cat-z-modal: #{$z-modal};
+  --cat-z-toast: #{$z-toast};
+}
+
+// ============================================================================
+// Scrollbar Styling
+// ============================================================================
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: $grey-600;
+  border-radius: $radius-full;
+
+  &:hover {
+    background: $grey-500;
+  }
+}
+
+// Firefox scrollbar (scrollbar-width: thin automatically styles)
+* {
+  scrollbar-color: $grey-600 transparent;
+  scrollbar-width: thin;
+}
+
+// ============================================================================
+// Accessibility
+// ============================================================================
+
+// Skip to content link for keyboard navigation
+.skip-to-content {
+  position: absolute;
+  top: -100%;
+  left: $space-4;
+  z-index: $z-toast;
+  padding: $space-2 $space-4;
+  background: $accent-primary;
+  color: white;
+  border-radius: $radius-md;
+  font-weight: $weight-medium;
+  text-decoration: none;
+  transition: top $transition-base;
+
+  &:focus {
+    top: $space-2;
+  }
+}
+
+// Visually hide but keep accessible to screen readers
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+// Respect user's motion preferences
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+// ============================================================================
+// Print Styles
+// ============================================================================
+
+@media print {
+  body {
+    background: white;
+    color: black;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: ' (' attr(href) ')';
+  }
+
+  // Hide UI chrome when printing
+  nav,
+  aside,
+  .no-print {
+    display: none !important;
+  }
+}
+
+// ============================================================================
+// Selection Styling
+// ============================================================================
+
+::selection {
+  background: $blue-500;
+  color: white;
+}
+
+::-moz-selection {
+  background: $blue-500;
+  color: white;
+}
+
+// ============================================================================
+// Focus Visible (Modern Focus Style)
+// ============================================================================
+
+:focus-visible {
+  outline: 2px solid $border-focus;
+  outline-offset: 2px;
+}
+
+// ============================================================================
+// Webkit-specific fixes
+// ============================================================================
+
+// Prevent zoom on input focus on mobile
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+textarea {
+  font-size: $text-base;
+}
+
+// iOS Safari input appearance
+input,
+textarea,
+select {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+// Remove default button styles
+button {
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-family: inherit;
+  cursor: pointer;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}
+
+// Remove default form element styling
+textarea {
+  resize: vertical;
+  font-family: $font-sans;
+}
+
+select {
+  background-image: none;
+}
+
+// ============================================================================
+// Placeholder Styling
+// ============================================================================
+
+::placeholder {
+  color: $text-tertiary;
+  opacity: 1;
+}
+
+::-ms-input-placeholder {
+  color: $text-tertiary;
+}
+
+// ============================================================================
+// Code Block Styling
+// ============================================================================
+
+code,
+pre {
+  font-family: $font-mono;
+  font-size: $text-sm;
+}
+
+code {
+  background: $bg-input;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-sm;
+  padding: $space-1 $space-2;
+}
+
+pre {
+  background: $bg-input;
+  border: 1px solid $border-subtle;
+  border-radius: $radius-md;
+  padding: $space-4;
+  overflow-x: auto;
+
+  code {
+    background: none;
+    border: none;
+    padding: 0;
+  }
+}
+
+// ============================================================================
+// Horizontal Rule
+// ============================================================================
+
+hr {
+  margin: $space-6 0;
+  border: none;
+  border-top: 1px solid $border-default;
+}
+
+// ============================================================================
+// Links
+// ============================================================================
+
+a {
+  color: $accent-primary;
+  text-decoration: none;
+  transition: color $transition-base;
+
+  &:hover {
+    color: $blue-400;
+    text-decoration: underline;
+  }
+
+  &:active {
+    color: $blue-600;
+  }
+
+  &:visited {
+    color: $blue-600;
+  }
+}
+
+// ============================================================================
+// Tables
+// ============================================================================
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+th,
+td {
+  padding: $space-3 $space-4;
+  text-align: left;
+  border-bottom: 1px solid $border-default;
+}
+
+th {
+  background: $bg-elevated;
+  font-weight: $weight-semibold;
+  color: $text-primary;
+}
+
+tbody tr {
+  transition: background $transition-base;
+
+  &:hover {
+    background: $bg-hover;
+  }
+}
+
+// ============================================================================
+// Lists
+// ============================================================================
+
+ol,
+ul {
+  margin: $space-4 0;
+  padding-left: $space-6;
+}
+
+li {
+  margin: $space-2 0;
+}
+
+dt {
+  font-weight: $weight-semibold;
+}
+
+dd {
+  margin-left: $space-4;
+  margin-bottom: $space-2;
+}

@@ -1,0 +1,24 @@
+// ============================================================================
+// DESIGN SYSTEM - ENTRY POINT
+// ============================================================================
+// Main SCSS file that imports all design system partials in correct order.
+// This file should be imported once in your main application entry point.
+// ============================================================================
+
+// 1. Design tokens - Single source of truth
+@use 'tokens';
+
+// 2. Element Plus component library overrides
+@use 'element-overrides';
+
+// 3. Reusable SCSS mixins and utilities
+@use 'mixins';
+
+// 3b. Element Plus component override mixins
+@use 'mixins-element';
+
+// 4. Light theme semantic token overrides
+@use 'theme-light';
+
+// 5. Global base styles, resets, and utilities
+@use 'globals';

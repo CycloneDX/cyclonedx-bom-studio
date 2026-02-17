@@ -1,0 +1,162 @@
+// ============================================================================
+// CYCLONEDX AUTHORING TOOL - DESIGN TOKENS
+// ============================================================================
+// Single source of truth for all visual properties.
+// Dark theme inspired by OWASP Dependency-Track: deep navy backgrounds,
+// blue accent palette, clean system fonts.
+// ============================================================================
+
+// === Neutral scale (blue-tinted dark greys — Dependency-Track palette) ===
+$grey-950: #0d1117;
+$grey-900: #131920;
+$grey-850: #161b22;
+$grey-800: #1c2128;
+$grey-750: #21262d;
+$grey-700: #282e36;
+$grey-650: #30363d;
+$grey-600: #3d444d;
+$grey-500: #4d5562;
+$grey-400: #6e7681;
+$grey-300: #8b949e;
+$grey-200: #b1bac4;
+$grey-100: #d0d7de;
+$grey-50: #e6edf3;
+$grey-0: #f0f3f6;
+
+// === Blue accent ramp (Dependency-Track primary) ===
+$blue-900: #0a2540;
+$blue-800: #0d3668;
+$blue-700: #1158a0;
+$blue-600: #1a7fd4;
+$blue-500: #2f81f7; // Primary accent
+$blue-400: #58a6ff;
+$blue-300: #79c0ff;
+$blue-200: #a5d6ff;
+$blue-100: #ddf4ff;
+
+// === Teal/Cyan ramp (secondary accent, links) ===
+$teal-600: #1a9d73;
+$teal-500: #2ea87a;
+$teal-400: #3fb950;
+$teal-300: #56d364;
+
+// === Functional status ===
+$green-500: #3fb950;
+$amber-500: #d29922;
+$red-500: #f85149;
+$info-blue: #58a6ff;
+
+// === Purple (kept for backward compat but no longer primary) ===
+$purple-900: #2e1065;
+$purple-800: #3b1398;
+$purple-700: #4f1dc4;
+$purple-600: #6d28d9;
+$purple-500: #8957e5;
+$purple-400: #a371f7;
+$purple-300: #bc8cff;
+$purple-200: #d2a8ff;
+$purple-100: #eddeff;
+
+// === Magenta/pink ramp (charts/highlights) ===
+$magenta-600: #c026d3;
+$magenta-500: #db61a2;
+$magenta-400: #f778ba;
+$magenta-300: #ff9bce;
+
+// === Gradients ===
+$gradient-accent: linear-gradient(135deg, $blue-600, $blue-400);
+$gradient-accent-hover: linear-gradient(135deg, $blue-500, $blue-300);
+
+// === Dark theme semantic tokens ===
+$bg-app: $grey-950;
+$bg-sidebar: $grey-900;
+$bg-surface: $grey-850;
+$bg-elevated: $grey-800;
+$bg-input: $grey-750;
+$bg-hover: rgba($blue-500, 0.08);
+$bg-active: rgba($blue-500, 0.16);
+$bg-selected: rgba($blue-500, 0.12);
+$border-default: $grey-650;
+$border-subtle: $grey-700;
+$border-focus: $blue-500;
+$text-primary: $grey-50;
+$text-secondary: $grey-300;
+$text-tertiary: $grey-400;
+$text-disabled: $grey-500;
+$accent-primary: $blue-500;
+
+// === Border radius ===
+$radius-sm: 4px;
+$radius-md: 6px;
+$radius-lg: 8px;
+$radius-xl: 12px;
+$radius-full: 9999px;
+
+// === Shadows ===
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+$shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+$shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+$shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.6);
+$shadow-glow: 0 0 20px rgba($blue-500, 0.15);
+$shadow-focus: 0 0 0 3px rgba($blue-500, 0.35);
+
+// === Spacing (4px base grid) ===
+$space-1: 4px;
+$space-2: 8px;
+$space-3: 12px;
+$space-4: 16px;
+$space-5: 20px;
+$space-6: 24px;
+$space-8: 32px;
+$space-10: 40px;
+$space-12: 48px;
+$space-16: 64px;
+
+// === Typography (Dependency-Track sizing: compact, smaller base) ===
+$text-2xs: 0.6875rem;
+$text-xs: 0.75rem;
+$text-sm: 0.8125rem;
+$text-base: 0.875rem;
+$text-md: 0.9375rem;
+$text-lg: 1rem;
+$text-xl: 1.125rem;
+$text-2xl: 1.375rem;
+$text-3xl: 1.75rem;
+$text-4xl: 2.25rem;
+$weight-normal: 400;
+$weight-medium: 500;
+$weight-semibold: 600;
+$weight-bold: 700;
+
+// === Font stacks (system sans-serif like Dependency-Track) ===
+$font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', 'Noto Sans CJK SC', 'PingFang SC', 'Hiragino Kaku Gothic Pro', 'Microsoft YaHei', 'Yu Gothic', 'Noto Sans Arabic', sans-serif;
+$font-mono: 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+
+// === Transitions ===
+$transition-fast: 120ms ease;
+$transition-base: 200ms ease;
+$transition-slow: 300ms ease;
+
+// === Layout ===
+$sidebar-width: 220px;
+$sidebar-collapsed: 56px;
+$topbar-height: 48px;
+$statusbar-height: 28px;
+
+// === Z-index ===
+$z-base: 0;
+$z-dropdown: 100;
+$z-sticky: 200;
+$z-overlay: 300;
+$z-modal: 400;
+$z-toast: 500;
+
+// === Chart / dashboard colors ===
+$chart-blue: #58a6ff;
+$chart-green: #3fb950;
+$chart-amber: #d29922;
+$chart-red: #f85149;
+$chart-purple: #a371f7;
+$chart-teal: #39d353;
+$chart-orange: #db6d28;
+$chart-pink: #db61a2;

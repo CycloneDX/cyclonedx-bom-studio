@@ -1,0 +1,45 @@
+// ============================================================================
+// LIGHT THEME SEMANTIC TOKEN OVERRIDES
+// ============================================================================
+// Light theme CSS custom properties. Not currently used (dark-only mode)
+// but kept for potential future use.
+// ============================================================================
+
+html.light {
+  // Application background colors
+  --cat-bg-app: #f6f8fa;
+  --cat-bg-sidebar: #eef1f5;
+  --cat-bg-surface: #ffffff;
+  --cat-bg-elevated: #ffffff;
+  --cat-bg-input: #f0f3f6;
+
+  // Interactive state backgrounds
+  --cat-bg-hover: rgba(47, 129, 247, 0.05);
+  --cat-bg-active: rgba(47, 129, 247, 0.1);
+  --cat-bg-selected: rgba(47, 129, 247, 0.08);
+
+  // Border colors
+  --cat-border-default: #d0d7de;
+  --cat-border-subtle: #d8dee4;
+  --cat-border-focus: #2f81f7;
+
+  // Text colors
+  --cat-text-primary: #1f2328;
+  --cat-text-secondary: #656d76;
+  --cat-text-tertiary: #6e7681;
+  --cat-text-disabled: #8b949e;
+
+  // Accent colors
+  --cat-accent-primary: #2f81f7;
+
+  // Shadows (lighter for light theme)
+  --cat-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --cat-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --cat-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --cat-shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.15);
+  --cat-shadow-glow: 0 0 20px rgba(47, 129, 247, 0.12);
+  --cat-shadow-focus: 0 0 0 3px rgba(47, 129, 247, 0.2);
+
+  // Gradients
+  --cat-gradient-accent: linear-gradient(135deg, #1a7fd4, #58a6ff);
+}

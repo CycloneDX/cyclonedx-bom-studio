@@ -1,0 +1,268 @@
+// ============================================================================
+// REUSABLE SCSS MIXINS
+// ============================================================================
+// Utility mixins for common design patterns and interactions.
+// ============================================================================
+
+@use 'tokens' as *;
+
+// Focus state with purple ring
+@mixin focus-ring {
+  outline: none;
+  border-color: $border-focus;
+  box-shadow: $shadow-focus;
+}
+
+// Gradient background with hover animation
+@mixin gradient-bg {
+  background: $gradient-accent;
+  transition: background $transition-base;
+  &:hover {
+    background: $gradient-accent-hover;
+  }
+}
+
+// Standard card/elevated surface styling
+@mixin card-surface {
+  background: $bg-surface;
+  border: 1px solid $border-default;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  padding: $space-5;
+}
+
+// Purple glow effect on hover
+@mixin glow-on-hover {
+  transition: box-shadow $transition-base;
+  &:hover {
+    box-shadow: $shadow-glow;
+  }
+}
+
+// Single-line text truncation
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// Multi-line text truncation (limit to N lines)
+// Usage: @include text-clamp(2);
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Respect prefers-reduced-motion for accessibility
+@mixin reduced-motion {
+  @media (prefers-reduced-motion: reduce) {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+// Dark mode safe text color with fallback
+@mixin text-safe($light-color: $text-primary) {
+  color: $light-color;
+  @media (prefers-color-scheme: light) {
+    color: #1a1625;
+  }
+}
+
+// Smooth transition wrapper
+@mixin transition($properties: all, $duration: $transition-base) {
+  transition: $properties $duration;
+  @include reduced-motion;
+}
+
+// Flexbox center both axes
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Flexbox row with gap
+@mixin flex-row($gap: $space-4) {
+  display: flex;
+  flex-direction: row;
+  gap: $gap;
+  align-items: center;
+}
+
+// Flexbox column with gap
+@mixin flex-col($gap: $space-4) {
+  display: flex;
+  flex-direction: column;
+  gap: $gap;
+}
+
+// Grid with automatic responsive columns
+@mixin grid-auto($min-width: 250px, $gap: $space-5) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// Absolute overlay that fills parent
+@mixin absolute-fill {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+
+// Responsive padding shorthand
+@mixin responsive-padding($mobile: $space-4, $tablet: $space-5, $desktop: $space-6) {
+  padding: $mobile;
+  @media (min-width: 768px) {
+    padding: $tablet;
+  }
+  @media (min-width: 1024px) {
+    padding: $desktop;
+  }
+}
+
+// High contrast focus state for interactive elements
+@mixin focus-visible {
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Disabled state styling
+@mixin disabled-state {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+// Button-like interactive element
+@mixin button-base {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-2 $space-4;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  background: $bg-elevated;
+  color: $text-primary;
+  font-family: $font-sans;
+  font-size: $text-base;
+  font-weight: $weight-medium;
+  cursor: pointer;
+  @include transition;
+  @include focus-visible;
+
+  &:disabled {
+    @include disabled-state;
+  }
+}
+
+// Input field base styling
+@mixin input-base {
+  width: 100%;
+  padding: $space-2 $space-3;
+  border: 1px solid $border-default;
+  border-radius: $radius-md;
+  background: $bg-input;
+  color: $text-primary;
+  font-family: $font-sans;
+  font-size: $text-base;
+  @include transition;
+
+  &:hover {
+    border-color: $border-subtle;
+  }
+
+  &:focus {
+    @include focus-ring;
+  }
+
+  &::placeholder {
+    color: $text-tertiary;
+  }
+
+  &:disabled {
+    @include disabled-state;
+    background: $bg-surface;
+  }
+}
+
+// Scrollable container with custom scrollbar
+@mixin custom-scrollbar {
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: $grey-600 transparent;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: $grey-600;
+    border-radius: $radius-full;
+
+    &:hover {
+      background: $grey-500;
+    }
+  }
+}
+
+// Skeleton/placeholder loading animation
+@mixin skeleton-loading {
+  background: linear-gradient(
+    90deg,
+    $bg-surface 25%,
+    $bg-elevated 50%,
+    $bg-surface 75%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-pulse 1.5s infinite;
+}
+
+@keyframes skeleton-pulse {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+// Badge/pill styling
+@mixin badge-base($bg: $bg-elevated, $color: $text-primary) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  background: $bg;
+  color: $color;
+  font-size: $text-xs;
+  font-weight: $weight-medium;
+  white-space: nowrap;
+}
+
+// Hover lift effect (elevation increase)
+@mixin hover-lift {
+  @include transition(transform, box-shadow);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+// Print styles
+@mixin print-hidden {
+  @media print {
+    display: none !important;
+  }
+}

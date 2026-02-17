@@ -1,0 +1,231 @@
+// ============================================================================
+// ELEMENT PLUS OVERRIDE MIXINS
+// ============================================================================
+// Reusable mixins for the most common Element Plus :deep() overrides.
+// These eliminate ~500+ lines of copy-pasted SCSS across editors.
+// ============================================================================
+
+@use 'tokens' as *;
+
+// ---------------------------------------------------------------------------
+// Card — header/body padding and borders (used by EditorCard and editors)
+// ---------------------------------------------------------------------------
+@mixin element-card {
+  :deep(.el-card__header) {
+    padding: $space-6;
+    border-bottom: 1px solid $border-default;
+  }
+
+  :deep(.el-card__body) {
+    padding: $space-6;
+    background-color: $bg-surface;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Primary button — translucent accent styling for plain buttons
+// ---------------------------------------------------------------------------
+@mixin element-button-primary {
+  :deep(.el-button--primary) {
+    --el-button-bg-color: rgba($accent-primary, 0.1);
+    --el-button-border-color: rgba($accent-primary, 0.3);
+    --el-button-text-color: $accent-primary;
+
+    &:hover {
+      --el-button-bg-color: rgba($accent-primary, 0.2);
+      --el-button-border-color: $accent-primary;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Danger button — translucent red styling for plain buttons
+// ---------------------------------------------------------------------------
+@mixin element-button-danger {
+  :deep(.el-button--danger) {
+    --el-button-bg-color: rgba($red-500, 0.1);
+    --el-button-border-color: rgba($red-500, 0.2);
+    --el-button-text-color: $red-500;
+
+    &:hover {
+      --el-button-bg-color: rgba($red-500, 0.15);
+      --el-button-border-color: $red-500;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Table — header, body, cell, empty-block styling
+// ---------------------------------------------------------------------------
+@mixin element-table {
+  :deep(.el-table__header-wrapper) {
+    background-color: $bg-input;
+  }
+
+  :deep(.el-table__body-wrapper) {
+    background-color: transparent;
+  }
+
+  :deep(.el-table__row) {
+    &:hover > td {
+      background-color: rgba($accent-primary, 0.04);
+    }
+  }
+
+  :deep(.el-table__cell) {
+    color: $text-primary;
+    border-color: $border-default;
+    padding: $space-3;
+  }
+
+  :deep(.el-table__header th) {
+    color: $text-secondary;
+    font-weight: $weight-semibold;
+    background-color: $bg-input;
+  }
+
+  :deep(.el-table__empty-block) {
+    background-color: $bg-surface;
+
+    .el-table__empty-text {
+      color: $text-secondary;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Table (compact) — used by shared sub-editors (PropertyEditor, HashEditor)
+// that render inside a bordered wrapper rather than a card
+// ---------------------------------------------------------------------------
+@mixin element-table-compact {
+  :deep(.el-table__header) {
+    background-color: $bg-elevated;
+
+    .el-table__cell {
+      background-color: $bg-elevated;
+      color: $text-primary;
+      border-color: $border-default;
+      font-weight: $weight-semibold;
+      font-size: $text-sm;
+    }
+  }
+
+  :deep(.el-table__body) {
+    background-color: $bg-surface;
+
+    .el-table__row {
+      transition: background-color $transition-base;
+
+      &:hover {
+        background-color: rgba($accent-primary, 0.05);
+      }
+    }
+
+    .el-table__cell {
+      background-color: transparent;
+      color: $text-primary;
+      border-color: $border-default;
+      padding: $space-3;
+    }
+  }
+
+  :deep(.el-table__empty-block) {
+    background-color: $bg-surface;
+
+    .el-table__empty-text {
+      color: $text-secondary;
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Input — wrapper, inner, placeholder, focus ring
+// ---------------------------------------------------------------------------
+@mixin element-input {
+  :deep(.el-input__wrapper) {
+    background-color: $bg-input;
+    border-color: $border-default;
+
+    &:hover {
+      border-color: $border-default;
+    }
+  }
+
+  :deep(.el-input__inner) {
+    color: $text-primary;
+    font-size: $text-base;
+
+    &::placeholder {
+      color: $text-secondary;
+    }
+  }
+
+  :deep(.el-textarea__inner) {
+    background-color: $bg-input;
+    color: $text-primary;
+    font-size: $text-base;
+
+    &::placeholder {
+      color: $text-secondary;
+    }
+  }
+
+  :deep(.el-input.is-focus .el-input__wrapper),
+  :deep(.el-textarea.is-focus .el-textarea__inner) {
+    box-shadow: 0 0 0 2px rgba($accent-primary, 0.1);
+    border-color: $border-focus;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Select — wrapper, inner, focus for ElSelect components
+// ---------------------------------------------------------------------------
+@mixin element-select {
+  :deep(.el-input__wrapper) {
+    background-color: $bg-input;
+    border-color: $border-default;
+
+    &:hover {
+      border-color: $border-default;
+    }
+  }
+
+  :deep(.el-input__inner) {
+    color: $text-primary;
+    font-size: $text-base;
+  }
+
+  :deep(.el-select.is-focused .el-input__wrapper) {
+    box-shadow: 0 0 0 2px rgba($accent-primary, 0.1);
+    border-color: $border-focus;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Popper — dropdown/option styling for ElSelect dropdowns
+// ---------------------------------------------------------------------------
+@mixin element-popper {
+  :deep(.el-popper) {
+    background-color: $bg-elevated;
+    border-color: $border-default;
+
+    .el-scrollbar__wrap {
+      background-color: $bg-elevated;
+    }
+  }
+
+  :deep(.el-option) {
+    .el-option__content {
+      color: $text-primary;
+    }
+
+    &:hover {
+      background-color: rgba($accent-primary, 0.1) !important;
+    }
+
+    &.selected {
+      color: $accent-primary;
+      background-color: rgba($accent-primary, 0.1) !important;
+    }
+  }
+}

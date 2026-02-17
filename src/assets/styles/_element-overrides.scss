@@ -1,0 +1,100 @@
+// ============================================================================
+// ELEMENT PLUS THEME OVERRIDES
+// ============================================================================
+// Maps design tokens onto Element Plus CSS custom properties.
+// Dark theme inspired by OWASP Dependency-Track.
+// ============================================================================
+
+@use 'sass:color';
+@use 'tokens' as *;
+
+// Dark theme (default)
+:root,
+html.dark {
+  // Colors
+  --el-color-primary: #{$blue-500};
+  --el-color-primary-light-3: #{$blue-400};
+  --el-color-primary-light-5: #{$blue-300};
+  --el-color-primary-light-7: #{$blue-200};
+  --el-color-primary-light-9: #{$blue-100};
+  --el-color-primary-dark-2: #{$blue-700};
+  --el-color-success: #{$green-500};
+  --el-color-warning: #{$amber-500};
+  --el-color-danger: #{$red-500};
+  --el-color-info: #{$info-blue};
+
+  // Backgrounds
+  --el-bg-color-page: #{$grey-950};
+  --el-bg-color: #{$grey-850};
+  --el-bg-color-overlay: #{$grey-800};
+  --el-fill-color: #{$grey-750};
+  --el-fill-color-light: #{$grey-800};
+  --el-fill-color-lighter: #{$grey-850};
+  --el-fill-color-blank: #{$grey-800};
+
+  // Borders
+  --el-border-color: #{$grey-650};
+  --el-border-color-light: #{$grey-700};
+  --el-border-color-lighter: #{$grey-750};
+  --el-border-color-dark: #{$grey-600};
+
+  // Text
+  --el-text-color-primary: #{$grey-50};
+  --el-text-color-regular: #{$grey-200};
+  --el-text-color-secondary: #{$grey-300};
+  --el-text-color-placeholder: #{$grey-400};
+  --el-text-color-disabled: #{$grey-500};
+
+  // Border radius
+  --el-border-radius-base: #{$radius-md};
+  --el-border-radius-small: #{$radius-sm};
+  --el-border-radius-round: #{$radius-full};
+
+  // Font
+  --el-font-family: #{$font-sans};
+  --el-font-size-base: #{$text-base};
+  --el-font-size-small: #{$text-sm};
+  --el-font-size-extra-small: #{$text-xs};
+
+  // Shadows
+  --el-box-shadow: #{$shadow-md};
+  --el-box-shadow-light: #{$shadow-sm};
+  --el-box-shadow-lighter: #{$shadow-sm};
+  --el-box-shadow-dark: #{$shadow-lg};
+
+  // Mask
+  --el-mask-color: rgba(0, 0, 0, 0.6);
+  --el-mask-color-extra-light: rgba(0, 0, 0, 0.3);
+}
+
+// Plain primary buttons: fully transparent background, blue border + text
+.el-button--primary.is-plain {
+  --el-button-bg-color: transparent;
+  --el-button-border-color: #{$blue-500};
+  --el-button-text-color: #{$blue-500};
+  --el-button-hover-bg-color: transparent;
+  --el-button-hover-border-color: #{$blue-400};
+  --el-button-hover-text-color: #{$blue-400};
+  --el-button-active-bg-color: transparent;
+  --el-button-active-border-color: #{$blue-600};
+  --el-button-active-text-color: #{$blue-600};
+}
+
+// Icon-only buttons: ensure square aspect ratio
+.el-button:has(> .el-icon:only-child) {
+  aspect-ratio: 1;
+  padding-inline: 0;
+}
+
+// Plain success buttons: fully transparent background, green border + text
+.el-button--success.is-plain {
+  --el-button-bg-color: transparent;
+  --el-button-border-color: #{$green-500};
+  --el-button-text-color: #{$green-500};
+  --el-button-hover-bg-color: transparent;
+  --el-button-hover-border-color: #{color.adjust($green-500, $lightness: 10%)};
+  --el-button-hover-text-color: #{color.adjust($green-500, $lightness: 10%)};
+  --el-button-active-bg-color: transparent;
+  --el-button-active-border-color: #{color.adjust($green-500, $lightness: -10%)};
+  --el-button-active-text-color: #{color.adjust($green-500, $lightness: -10%)};
+}
