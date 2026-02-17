@@ -79,10 +79,10 @@ npm run test:coverage     # with coverage report
 
 ### Base URL Configuration
 
-To deploy under a subpath, set the `VITE_BASE` environment variable:
+To deploy under a subpath, set the `BASE_URL` environment variable:
 
 ```bash
-VITE_BASE=/my-app/ npm run build
+BASE_URL=/my-app/ npm run build
 ```
 
 ## Technology
