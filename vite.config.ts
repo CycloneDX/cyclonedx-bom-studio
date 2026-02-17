@@ -6,8 +6,18 @@ import { readFileSync } from 'fs'
 const pkg = JSON.parse(readFileSync(resolve(__dirname, 'package.json'), 'utf-8'))
 
 export default defineConfig({
+  build: {
+    modulePreload: { polyfill: false },
+  },
   plugins: [
     vue(),
+    {
+      name: 'remove-crossorigin',
+      enforce: 'post',
+      transformIndexHtml(html) {
+        return html.replace(/ crossorigin/g, '')
+      },
+    },
   ],
   resolve: {
     alias: {
