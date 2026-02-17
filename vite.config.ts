@@ -20,8 +20,20 @@ const cspPolicy = [
 ].join('; ')
 
 export default defineConfig({
+  build: {
+    // Disable crossorigin attribute on script/link tags to avoid CORS
+    // issues when served from static hosts without CORS headers
+    modulePreload: { polyfill: false },
+  },
   plugins: [
     vue(),
+    // Strip crossorigin attributes that conflict with CSP 'self' on static hosts
+    {
+      name: 'remove-crossorigin',
+      transformIndexHtml(html) {
+        return html.replace(/ crossorigin/g, '')
+      },
+    },
     // Inject CSP meta tag only in production builds
     {
       name: 'inject-csp',
