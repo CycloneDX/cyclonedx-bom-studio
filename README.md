@@ -55,6 +55,12 @@ npm run dev
 
 Opens a hot-reloading dev server at `http://localhost:5173`.
 
+Alternatively, you can use a local Docker container to run the dev server.
+
+```bash
+./dev.sh
+```
+
 ### Production Build
 
 ```bash
