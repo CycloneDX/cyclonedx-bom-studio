@@ -176,10 +176,15 @@ watch(formattedJson, (newVal) => {
   }
 })
 
-onMounted(() => {
-  nextTick(() => {
-    initEditor(formattedJson.value, true)
-  })
+// Initialize the editor once the container is actually in the DOM.
+// Because this is an async component (top-level await), onMounted may fire
+// before the template with v-if="ready" has rendered the container element.
+watch(ready, (isReady) => {
+  if (isReady) {
+    nextTick(() => {
+      initEditor(formattedJson.value, true)
+    })
+  }
 })
 
 onBeforeUnmount(() => {
