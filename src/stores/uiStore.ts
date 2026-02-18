@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 const STORAGE_KEY = 'cat_ui_prefs'
 
 // Whitelist of allowed locale codes
-const ALLOWED_LOCALES = ['en-US', 'de-DE', 'fr-FR', 'es-ES', 'ja-JP', 'zh-CN', 'pt-BR']
+const ALLOWED_LOCALES = ['en-US', 'de-DE', 'fr-FR', 'es-ES', 'ja-JP', 'zh-CN', 'ar-SA', 'ru-RU']
 
 export const useUiStore = defineStore('ui', () => {
   const locale = ref('en-US')
