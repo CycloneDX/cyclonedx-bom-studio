@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { ElButton, ElDivider, ElIcon, ElTooltip, ElSelect, ElOption } from 'element-plus'
 import {
@@ -7,10 +7,12 @@ import {
   FolderOpened,
   Download,
   CircleCheck,
+  InfoFilled,
 } from '@element-plus/icons-vue'
 import { useUiStore } from '@/stores/uiStore'
 import { AVAILABLE_LOCALES } from '@/i18n'
 import cyclonedxLogo from '@/assets/images/cyclonedx-logo.svg'
+import AboutDialog from '@/components/layout/AboutDialog.vue'
 
 declare const __APP_VERSION__: string
 const appVersion = __APP_VERSION__
@@ -24,6 +26,8 @@ defineEmits<{
   saveBom: []
   validateBom: []
 }>()
+
+const showAbout = ref(false)
 
 const currentLocale = computed({
   get: () => uiStore.locale,
@@ -85,8 +89,19 @@ const currentLocale = computed({
       </el-tooltip>
     </div>
 
-    <!-- Right section: Mode and language -->
+    <!-- Right section: About, language -->
     <div class="topbar-section topbar-right">
+      <el-tooltip content="About" placement="bottom">
+        <el-button
+          text
+          size="small"
+          :icon="InfoFilled"
+          @click="showAbout = true"
+        />
+      </el-tooltip>
+
+      <el-divider direction="vertical" />
+
       <ElSelect v-model="currentLocale" class="locale-select" size="small">
         <ElOption
           v-for="locale in AVAILABLE_LOCALES"
@@ -97,6 +112,9 @@ const currentLocale = computed({
       </ElSelect>
     </div>
   </header>
+
+  <!-- About dialog -->
+  <AboutDialog v-model="showAbout" />
 </template>
 
 <style lang="scss" scoped>
