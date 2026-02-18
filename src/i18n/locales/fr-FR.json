@@ -114,7 +114,7 @@
     "cpe": "CPE",
     "cpePlaceholder": "ex. cpe:2.3:a:vendor:product:version",
     "purl": "Package-URL",
-    "purlPlaceholder": "ex. pkg:npm/express@4.17.1",
+    "purlPlaceholder": "ex. pkg:npm/express{'@'}4.17.1",
     "omniborId": "Identifiant d'artefact OmniBOR",
     "omniborIdPlaceholder": "ex. gitoid:blob:sha256:abc123...",
     "swhid": "SWHID",

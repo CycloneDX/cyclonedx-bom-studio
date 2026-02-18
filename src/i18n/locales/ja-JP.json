@@ -114,7 +114,7 @@
     "cpe": "CPE",
     "cpePlaceholder": "例: cpe:2.3:a:vendor:product:version",
     "purl": "Package-URL",
-    "purlPlaceholder": "例: pkg:npm/express@4.17.1",
+    "purlPlaceholder": "例: pkg:npm/express{'@'}4.17.1",
     "omniborId": "OmniBORアーティファクトID",
     "omniborIdPlaceholder": "例: gitoid:blob:sha256:abc123...",
     "swhid": "SWHID",
