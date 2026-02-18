@@ -27,7 +27,7 @@
     "uuid": "^13.0.0",
     "v-network-graph": "^0.9.22",
     "vue": "^3.5.25",
-    "vue-i18n": "^10.0.8",
+    "vue-i18n": "^11.2.8",
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
