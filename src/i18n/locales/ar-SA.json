@@ -55,7 +55,8 @@
     "saveBom": "حفظ BOM",
     "validate": "تحقق",
     "basicMode": "أساسي",
-    "advancedMode": "متقدم"
+    "advancedMode": "متقدم",
+    "about": "حول"
   },
   "bomIdentity": {
     "title": "هوية BOM",

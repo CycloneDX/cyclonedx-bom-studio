@@ -53,7 +53,8 @@
     "newBom": "New BOM",
     "openBom": "Open BOM",
     "saveBom": "Save BOM",
-    "validate": "Validate"
+    "validate": "Validate",
+    "about": "About"
   },
   "bomIdentity": {
     "title": "BOM Identity",

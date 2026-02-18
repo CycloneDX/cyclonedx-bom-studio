@@ -91,7 +91,7 @@ const currentLocale = computed({
 
     <!-- Right section: About, language -->
     <div class="topbar-section topbar-right">
-      <el-tooltip content="About" placement="bottom">
+      <el-tooltip :content="t('topbar.about')" placement="bottom">
         <el-button
           text
           size="small"

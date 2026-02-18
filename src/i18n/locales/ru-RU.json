@@ -55,7 +55,8 @@
     "saveBom": "Сохранить BOM",
     "validate": "Проверить",
     "basicMode": "Базовый",
-    "advancedMode": "Расширенный"
+    "advancedMode": "Расширенный",
+    "about": "О программе"
   },
   "bomIdentity": {
     "title": "Идентификация BOM",

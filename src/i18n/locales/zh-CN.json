@@ -55,7 +55,8 @@
     "saveBom": "保存 BOM",
     "validate": "验证",
     "basicMode": "基本",
-    "advancedMode": "高级"
+    "advancedMode": "高级",
+    "about": "关于"
   },
   "bomIdentity": {
     "title": "BOM 身份",

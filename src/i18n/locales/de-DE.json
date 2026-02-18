@@ -55,7 +55,8 @@
     "saveBom": "BOM speichern",
     "validate": "Validieren",
     "basicMode": "Basis",
-    "advancedMode": "Erweitert"
+    "advancedMode": "Erweitert",
+    "about": "Über"
   },
   "bomIdentity": {
     "title": "BOM-Identität",

@@ -55,7 +55,8 @@
     "saveBom": "BOM を保存",
     "validate": "検証",
     "basicMode": "基本",
-    "advancedMode": "詳細"
+    "advancedMode": "詳細",
+    "about": "概要"
   },
   "bomIdentity": {
     "title": "BOM ID",
