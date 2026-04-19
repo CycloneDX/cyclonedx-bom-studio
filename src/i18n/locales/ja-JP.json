@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "例: application/json",
     "versionOr": "または",
     "versionRange": "バージョン範囲",
-    "versionRangePlaceholder": "例: >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "例: vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "外部コンポーネント",
     "tags": "タグ",
     "tagsPlaceholder": "タグを入力してEnterを押してください",

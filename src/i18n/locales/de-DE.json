@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "z.B. application/json",
     "versionOr": "oder",
     "versionRange": "Versionsbereich",
-    "versionRangePlaceholder": "z.B. >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "z.B. vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "Externe Komponente",
     "tags": "Tags",
     "tagsPlaceholder": "Tag eingeben und Enter drücken",
