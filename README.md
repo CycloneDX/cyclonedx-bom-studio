@@ -13,8 +13,8 @@ A Bill of Materials is a structured inventory of all components, libraries, and 
 **Create and Edit BOMs Visually**
 Build CycloneDX BOMs from scratch or open existing ones for editing. Most fields in the CycloneDX specification are accessible through structured forms with contextual help and validation.
 
-**CycloneDX 1.4 – 1.7 Support**
-Full support for CycloneDX specification versions 1.4 through 1.7. BOMs using older formats (1.0 – 1.5) are automatically upgraded to 1.7 on import. Version-specific fields appear and hide based on the selected spec version.
+**CycloneDX 1.6 – 1.7 Support**
+Full support for CycloneDX specification versions 1.6 through 1.7. Version-specific fields appear and hide based on the selected spec version.
 
 **Component Management**
 Add and edit components of all CycloneDX types: application, framework, library, container, platform, device, device-driver, firmware, file, machine-learning-model, data, cryptographic-asset. Each component type shows its relevant property editors.
@@ -130,7 +130,7 @@ src/
 
 | Spec Version | Support |
 |-------------|---------|
-| 1.2 – 1.5 | Auto-upgraded to 1.7 on import |
+| 1.2 – 1.5 | Not supported |
 | 1.6 | Full support - JSON only |
 | 1.7 | Full support - JSON only (default) |
 
