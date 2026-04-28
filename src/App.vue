@@ -68,8 +68,11 @@ const handleOpenBom = async () => {
     if (bomJson) {
       const result = bomStore.loadBom(bomJson)
       if (result?.converted) {
+        const wasVersion = result.originalVersion
+          ? `v${result.originalVersion}`
+          : 'an unsupported spec version'
         ElMessage.warning({
-          message: `This BOM was CycloneDX v${result.originalVersion}. BOM Studio only supports v1.6 and v1.7. The BOM has been converted to v1.7.`,
+          message: `This BOM was CycloneDX ${wasVersion}. BOM Studio supports v1.6 and v1.7 only. The BOM has been converted to v${bomStore.bom.specVersion}.`,
           duration: 6000,
           showClose: true
         })

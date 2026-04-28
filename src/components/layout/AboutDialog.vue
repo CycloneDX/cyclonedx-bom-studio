@@ -42,7 +42,7 @@ defineEmits<{
 
       <!-- Description -->
       <p class="about-dialog__description">
-        A visual editor for creating, editing, and validating CycloneDX Software Bills of Materials (SBOMs). Supports CycloneDX specification versions 1.4 through 1.7.
+        A visual editor for creating, editing, and validating CycloneDX Software Bills of Materials (SBOMs). Supports CycloneDX specification versions 1.6 and 1.7.
       </p>
 
       <!-- Privacy notice -->

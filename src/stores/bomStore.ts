@@ -1,13 +1,14 @@
 import { ref, computed } from 'vue'
 import { defineStore } from 'pinia'
 import { v4 as uuidv4 } from 'uuid'
-import { deepTrimStrings, isValidSpecVersion, MAX_COMPONENT_COUNT } from '@/utils/sanitize'
+import { deepTrimStrings, MAX_COMPONENT_COUNT } from '@/utils/sanitize'
+import { DEFAULT_SPEC_VERSION, isSupportedSpecVersion } from '@/utils/specVersions'
 
 export const useBomStore = defineStore('bom', () => {
   // State
   const bom = ref<any>({
     bomFormat: 'CycloneDX',
-    specVersion: '1.7',
+    specVersion: DEFAULT_SPEC_VERSION,
     serialNumber: `urn:uuid:${uuidv4()}`,
     version: 1,
     metadata: {
@@ -64,7 +65,7 @@ export const useBomStore = defineStore('bom', () => {
   function createNewBom() {
     bom.value = {
       bomFormat: 'CycloneDX',
-      specVersion: '1.7',
+      specVersion: DEFAULT_SPEC_VERSION,
       serialNumber: `urn:uuid:${uuidv4()}`,
       version: 1,
       metadata: {
@@ -97,22 +98,26 @@ export const useBomStore = defineStore('bom', () => {
     fileName.value = ''
   }
 
-  // Minimum supported spec version
-  const MINIMUM_SPEC_VERSION = '1.6'
-  const TARGET_SPEC_VERSION = '1.7'
-
   function loadBom(json: any): { converted: boolean; originalVersion: string } | undefined {
     if (!json || typeof json !== 'object') return
 
     // Deep-trim all string values in the incoming BOM
     const sanitized = deepTrimStrings(json)
 
-    // Validate spec version, default to target if invalid
-    const originalVersion = isValidSpecVersion(sanitized.specVersion) ? sanitized.specVersion : TARGET_SPEC_VERSION
+    // Capture whatever was on the wire, normalized to a string for reporting.
+    const incomingVersion = typeof sanitized.specVersion === 'string'
+      ? sanitized.specVersion
+      : (sanitized.specVersion != null ? String(sanitized.specVersion) : '')
+    const originalVersion = incomingVersion || DEFAULT_SPEC_VERSION
 
-    // Always upgrade to target version — app only supports 1.6+
-    const specVersion = TARGET_SPEC_VERSION
-    const converted = originalVersion !== TARGET_SPEC_VERSION
+    // Preserve the incoming spec version when it is one BOM Studio supports
+    // (1.6 or 1.7); otherwise convert to the latest supported version so the
+    // file can still be edited. This is what lets save round-trip a 1.6 BOM
+    // back as 1.6.
+    const specVersion = isSupportedSpecVersion(incomingVersion)
+      ? incomingVersion
+      : DEFAULT_SPEC_VERSION
+    const converted = !isSupportedSpecVersion(incomingVersion)
 
     // Enforce component count limit to prevent DoS
     const components = Array.isArray(sanitized.components) ? sanitized.components.slice(0, MAX_COMPONENT_COUNT) : []

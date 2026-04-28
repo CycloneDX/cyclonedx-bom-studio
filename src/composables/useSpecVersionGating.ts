@@ -1,14 +1,21 @@
 /**
  * Composable for gating CycloneDX features based on the current BOM spec version.
  *
+ * BOM Studio supports CycloneDX 1.6 and 1.7. The minVersion strings on the
+ * tables below also reference 1.4 and 1.5 because those are the versions in
+ * which a feature was originally introduced; the gating logic treats both
+ * supported versions (1.6 and 1.7) as inheriting all earlier additive
+ * features. The historical entries are kept for documentation and so that
+ * the comparison logic continues to work uniformly.
+ *
  * CycloneDX version changelog (features relevant to this app):
  *
- * v1.4 (baseline)
+ * v1.4 (historical baseline; not directly supported)
  *   - Components, Services, Dependencies, Vulnerabilities, External References, Compositions, Annotations, Properties
  *   - Component types: application, framework, library, container, operating-system, device, firmware, file
  *   - 16 external reference types
  *
- * v1.5
+ * v1.5 (historical; not directly supported)
  *   - Root-level formulation support
  *   - +4 component types: platform, device-driver, machine-learning-model, data
  *   - +23 external reference types (distribution-intake, source-distribution, security-contact, model-card,
@@ -17,23 +24,31 @@
  *     dynamic-analysis-report, runtime-analysis-report, component-analysis-report, maturity-report,
  *     certification-report, codified-infrastructure, quality-metrics, poam)
  *
- * v1.6
+ * v1.6 (supported)
  *   - +1 component type: cryptographic-asset
  *   - +3 external reference types: electronic-signature, digital-signature, rfc-9116
  *
- * v1.7
+ * v1.7 (supported)
  *   - Citations (new root-level field for data attribution)
  *   - Declarations (new root-level field)
  *   - +4 external reference types: patent, patent-family, patent-assertion, citation
+ *
+ * v2.0 is in development and is expected to introduce many breaking changes.
+ * When v2.0 lands, the additive minVersion model below will need to be
+ * extended (likely partitioned by major) since v2.0 is not strictly additive
+ * over v1.x. Add the v2.0 schema to src/schemas/, append '2.0' to
+ * SUPPORTED_SPEC_VERSIONS in src/utils/specVersions.ts, and revisit the
+ * tables below.
  */
 import { computed } from 'vue'
 import { useBomStore } from '@/stores/bomStore'
+import { DEFAULT_SPEC_VERSION } from '@/utils/specVersions'
 
-// Semver-like comparison for CycloneDX spec versions (e.g. "1.4", "1.7")
+// Semver-like comparison for CycloneDX spec versions (e.g. "1.6", "1.7")
 // Handles both string and numeric specVersion values (some BOMs use numbers)
 function versionAtLeast(current: string | number, minimum: string | number): boolean {
-  const curStr = String(current || '1.4')
-  const minStr = String(minimum || '1.4')
+  const curStr = String(current || DEFAULT_SPEC_VERSION)
+  const minStr = String(minimum || DEFAULT_SPEC_VERSION)
   const curParts = curStr.split('.').map(Number)
   const minParts = minStr.split('.').map(Number)
   const curMajor = curParts[0] ?? 0
@@ -137,7 +152,7 @@ const ROOT_FEATURES: FeatureGate[] = [
 export function useSpecVersionGating() {
   const bomStore = useBomStore()
 
-  const specVersion = computed(() => String(bomStore.bom.specVersion || '1.7'))
+  const specVersion = computed(() => String(bomStore.bom.specVersion || DEFAULT_SPEC_VERSION))
 
   /** Check if a specific spec version is supported */
   const isVersionAtLeast = (minVersion: string): boolean =>

@@ -1,15 +1,13 @@
 import { computed, type Ref } from 'vue'
+import { DEFAULT_SPEC_VERSION } from '@/utils/specVersions'
 
 // Static imports of all supported schema versions.
-// When a new CycloneDX version is released, add its schema here.
-import schema14 from '@/schemas/bom-1.4.schema.json'
-import schema15 from '@/schemas/bom-1.5.schema.json'
+// When a new CycloneDX version is released, add its schema here and update
+// SUPPORTED_SPEC_VERSIONS in src/utils/specVersions.ts.
 import schema16 from '@/schemas/bom-1.6.schema.json'
 import schema17 from '@/schemas/bom-1.7.schema.json'
 
 const schemas: Record<string, any> = {
-  '1.4': schema14,
-  '1.5': schema15,
   '1.6': schema16,
   '1.7': schema17
 }
@@ -186,7 +184,7 @@ function getDescription(schema: any, path: string): string | undefined {
 export function useSchemaTooltips(specVersion: Ref<string>) {
   const currentSchema = computed(() => {
     const version = specVersion.value
-    return schemas[version] || schemas['1.6'] // fallback to 1.6
+    return schemas[version] || schemas[DEFAULT_SPEC_VERSION]
   })
 
   /**
@@ -201,6 +199,9 @@ export function useSchemaTooltips(specVersion: Ref<string>) {
 }
 
 /**
- * List of supported CycloneDX spec versions.
+ * Re-export the canonical list of supported CycloneDX spec versions.
+ *
+ * The source of truth lives in src/utils/specVersions.ts so that schema
+ * bundling, gating, and UI selection all agree on what is supported.
  */
-export const SUPPORTED_SPEC_VERSIONS = Object.keys(schemas)
+export { SUPPORTED_SPEC_VERSIONS } from '@/utils/specVersions'

@@ -7,7 +7,7 @@ import { useBomStore } from '@/stores/bomStore'
 import TooltipLabel from '@/components/shared/TooltipLabel.vue'
 import EditorCard from '@/components/shared/EditorCard.vue'
 import ViewSpinner from '@/components/shared/ViewSpinner.vue'
-import { SUPPORTED_SPEC_VERSIONS } from '@/composables/useSchemaTooltips'
+import { SUPPORTED_SPEC_VERSIONS } from '@/utils/specVersions'
 import { useViewLoading, useViewLoadingAsync } from '@/composables/useViewLoading'
 
 await useViewLoadingAsync()
@@ -40,8 +40,8 @@ const specVersion = computed({
   }
 })
 
-// Only show 1.6+ versions in the dropdown
-const specVersionOptions = SUPPORTED_SPEC_VERSIONS.filter(v => parseFloat(v) >= 1.6)
+// Dropdown shows every spec version BOM Studio currently supports.
+const specVersionOptions = SUPPORTED_SPEC_VERSIONS
 
 const bomFormat = computed(() => bomStore.bom.bomFormat)
 

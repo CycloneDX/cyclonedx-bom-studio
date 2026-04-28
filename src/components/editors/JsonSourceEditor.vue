@@ -5,6 +5,7 @@ import { ElButton, ElSwitch, ElMessage } from 'element-plus'
 import { CopyDocument, Download } from '@element-plus/icons-vue'
 import { useBomStore } from '@/stores/bomStore'
 import { useValidationStore } from '@/stores/validationStore'
+import { deriveBomFilename } from '@/utils/bomFileHandler'
 import EditorCard from '@/components/shared/EditorCard.vue'
 import ViewSpinner from '@/components/shared/ViewSpinner.vue'
 import { EditorState } from '@codemirror/state'
@@ -135,7 +136,9 @@ const handleDownload = () => {
   const url = URL.createObjectURL(blob)
   const a = document.createElement('a')
   a.href = url
-  a.download = 'bom.json'
+  // Derive the same default filename as the toolbar Save action so that
+  // saving from either entry point produces a consistent name on disk.
+  a.download = deriveBomFilename(bomStore.bomForExport, 'json')
   a.click()
   URL.revokeObjectURL(url)
 }
@@ -151,8 +154,11 @@ const handleSaveEdits = () => {
     })
     // BOM watcher in App.vue will re-validate automatically
     if (result?.converted) {
+      const wasVersion = result.originalVersion
+        ? `v${result.originalVersion}`
+        : 'an unsupported spec version'
       ElMessage.warning({
-        message: `This BOM was CycloneDX v${result.originalVersion}. BOM Studio only supports v1.6 and v1.7. The BOM has been converted to v1.7.`,
+        message: `This BOM was CycloneDX ${wasVersion}. BOM Studio supports v1.6 and v1.7 only. The BOM has been converted to v${bomStore.bom.specVersion}.`,
         duration: 6000,
         showClose: true
       })

@@ -4,19 +4,17 @@ import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import { parse as jsoncParse, printParseErrorCode } from 'jsonc-parser'
 import type { ParseError } from 'jsonc-parser'
-import schema14 from '@/schemas/bom-1.4.schema.json'
-import schema15 from '@/schemas/bom-1.5.schema.json'
 import schema16 from '@/schemas/bom-1.6.schema.json'
 import schema17 from '@/schemas/bom-1.7.schema.json'
+import { DEFAULT_SPEC_VERSION } from '@/utils/specVersions'
 
 export interface ValidationError { path: string; message: string; keyword?: string }
 export interface ValidationWarning { path: string; message: string; recommendation?: string }
 export interface CompletenessItem { key: string; labelKey: string; present: boolean }
 
-// Schema map keyed by spec version
+// Schema map keyed by spec version. Only versions BOM Studio supports
+// (CycloneDX 1.6 and 1.7) are bundled.
 const schemas: Record<string, any> = {
-  '1.4': schema14,
-  '1.5': schema15,
   '1.6': schema16,
   '1.7': schema17,
 }
@@ -168,8 +166,8 @@ export const useValidationStore = defineStore('validation', () => {
       return
     }
 
-    const specVersion = String(bomExport.specVersion || '1.6')
-    const validator = validators[specVersion] || validators['1.6']
+    const specVersion = String(bomExport.specVersion || DEFAULT_SPEC_VERSION)
+    const validator = validators[specVersion] || validators[DEFAULT_SPEC_VERSION]
 
     if (!validator) {
       errors.value = [{ path: '', message: `No schema available for spec version ${specVersion}` }]

@@ -1,4 +1,40 @@
 import { sanitizeFilename, MAX_FILE_SIZE } from '@/utils/sanitize'
+import { DEFAULT_SPEC_VERSION } from '@/utils/specVersions'
+
+/**
+ * Build a default download filename for a BOM, per SPEC §22.2.
+ *
+ * Prefers `<metadata.component.name>-<metadata.component.version>.cdx.<ext>`
+ * when both name and version are present, falls back to
+ * `<metadata.component.name>.cdx.<ext>` when only name is present, and
+ * finally to `bom.cdx.<ext>` when no usable component metadata exists.
+ *
+ * The returned name is always run through sanitizeFilename and is guaranteed
+ * to end in `.cdx.<ext>`.
+ */
+export function deriveBomFilename(bom: any, ext: 'json' | 'xml' = 'json'): string {
+  const component = bom?.metadata?.component
+  const rawName = typeof component?.name === 'string' ? component.name.trim() : ''
+  const rawVersion = typeof component?.version === 'string' ? component.version.trim() : ''
+
+  let stem: string
+  if (rawName && rawVersion) {
+    stem = `${rawName}-${rawVersion}`
+  } else if (rawName) {
+    stem = rawName
+  } else {
+    stem = 'bom'
+  }
+
+  const sanitized = sanitizeFilename(`${stem}.cdx.${ext}`)
+  // sanitizeFilename can strip everything (e.g. an all-punctuation name),
+  // in which case it returns 'bom-export'. Guarantee the .cdx.<ext> suffix
+  // and a 'bom' fallback stem so the spec contract holds.
+  if (!sanitized.toLowerCase().endsWith(`.cdx.${ext}`)) {
+    return `bom.cdx.${ext}`
+  }
+  return sanitized
+}
 
 /**
  * Download BOM as JSON file
@@ -9,8 +45,10 @@ export function downloadBomAsJson(bom: any, filename?: string): void {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  const safeName = sanitizeFilename(filename || `cyclonedx-bom-${new Date().toISOString().split('T')[0]}.json`)
-  link.download = safeName.endsWith('.json') ? safeName : `${safeName}.json`
+  const safeName = filename
+    ? sanitizeFilename(filename.endsWith('.json') ? filename : `${filename}.json`)
+    : deriveBomFilename(bom, 'json')
+  link.download = safeName
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)
@@ -82,7 +120,7 @@ export async function copyBomToClipboard(bom: any, minified: boolean = false): P
  * Export BOM as XML (CycloneDX XML format)
  */
 export function downloadBomAsXml(bom: any, filename?: string): void {
-  const specVersion = bom.specVersion || '1.7'
+  const specVersion = bom.specVersion || DEFAULT_SPEC_VERSION
   let xml = `<?xml version="1.0" encoding="UTF-8"?>\n`
   xml += `<bom xmlns="http://cyclonedx.org/schema/bom/${specVersion}/bom.xsd" version="${bom.version || 1}">\n`
 
@@ -127,8 +165,10 @@ export function downloadBomAsXml(bom: any, filename?: string): void {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  const safeXmlName = sanitizeFilename(filename || `cyclonedx-bom-${new Date().toISOString().split('T')[0]}.xml`)
-  link.download = safeXmlName.endsWith('.xml') ? safeXmlName : `${safeXmlName}.xml`
+  const safeXmlName = filename
+    ? sanitizeFilename(filename.endsWith('.xml') ? filename : `${filename}.xml`)
+    : deriveBomFilename(bom, 'xml')
+  link.download = safeXmlName
   document.body.appendChild(link)
   link.click()
   document.body.removeChild(link)

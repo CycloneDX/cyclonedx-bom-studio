@@ -137,7 +137,11 @@ export function sanitizeInteger(value: unknown, min: number = 0, max: number = N
 }
 
 /**
- * Validate spec version is a known value.
+ * Validate that a spec version string is a known historical CycloneDX
+ * release. This accepts older versions (1.0 through 1.5) so that imports
+ * can be detected and converted; it does not imply BOM Studio supports
+ * editing them. Use isSupportedSpecVersion (src/utils/specVersions.ts) to
+ * check whether a version is one BOM Studio can edit and save as-is.
  */
 export function isValidSpecVersion(version: unknown): boolean {
   const allowed = ['1.0', '1.1', '1.2', '1.3', '1.4', '1.5', '1.6', '1.7']
