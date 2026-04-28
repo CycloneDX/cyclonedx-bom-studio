@@ -217,6 +217,7 @@ const handleSelectionChange = (selection: any[]) => {
             <ElTableColumn
               :label="t('component.group')"
               prop="group"
+              sortable
               width="150"
             >
               <template #default="{ row }">
