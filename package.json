@@ -24,7 +24,7 @@
     "element-plus": "^2.13.2",
     "jsonc-parser": "^3.3.1",
     "pinia": "^3.0.4",
-    "uuid": "^13.0.0",
+    "uuid": "^14.0.0",
     "v-network-graph": "^0.9.22",
     "vue": "^3.5.25",
     "vue-i18n": "^11.2.8",
