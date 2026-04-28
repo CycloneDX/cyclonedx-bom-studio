@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "例如 application/json",
     "versionOr": "或",
     "versionRange": "版本范围",
-    "versionRangePlaceholder": "例如 >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "例如 vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "外部组件",
     "tags": "标签",
     "tagsPlaceholder": "输入标签并按回车",

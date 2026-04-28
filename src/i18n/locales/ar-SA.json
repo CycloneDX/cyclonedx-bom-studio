@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "مثال: application/json",
     "versionOr": "أو",
     "versionRange": "نطاق الإصدار",
-    "versionRangePlaceholder": "مثال: >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "مثال: vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "مكون خارجي",
     "tags": "الوسوم",
     "tagsPlaceholder": "أدخل وسمًا واضغط Enter",

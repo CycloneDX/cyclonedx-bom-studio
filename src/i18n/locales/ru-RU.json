@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "напр. application/json",
     "versionOr": "или",
     "versionRange": "Диапазон версий",
-    "versionRangePlaceholder": "напр. >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "напр. vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "Внешний компонент",
     "tags": "Теги",
     "tagsPlaceholder": "Введите тег и нажмите Enter",

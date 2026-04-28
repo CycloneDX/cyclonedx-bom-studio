@@ -137,7 +137,7 @@
     "mimeTypePlaceholder": "ej. application/json",
     "versionOr": "o",
     "versionRange": "Rango de versiones",
-    "versionRangePlaceholder": "ej. >=1.0.0 <2.0.0",
+    "versionRangePlaceholder": "ej. vers:npm/1.2.3|>=2.0.0|<5.0.0",
     "isExternal": "Componente externo",
     "tags": "Etiquetas",
     "tagsPlaceholder": "Ingrese una etiqueta y presione Enter",
