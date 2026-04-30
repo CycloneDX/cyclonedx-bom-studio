@@ -122,7 +122,11 @@ export const useBomStore = defineStore('bom', () => {
         component: null,
         lifecycles: [],
         tools: {
-          components: [{ type: 'application', name: 'CycloneDX BOM Studio', version: '1.0.0', manufacturer: { name: 'CycloneDX' } }],
+          // Read the same Vite-injected version constant the UI reads
+          // (TopBar / AboutDialog). Fixes #143: a hardcoded literal here
+          // would silently drift from package.json on every release and
+          // disagree with the version shown on screen.
+          components: [{ type: 'application', name: 'CycloneDX BOM Studio', version: __APP_VERSION__, manufacturer: { name: 'CycloneDX' } }],
           services: []
         },
         licenses: [],

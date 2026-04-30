@@ -14,7 +14,7 @@ import { AVAILABLE_LOCALES } from '@/i18n'
 import cyclonedxLogo from '@/assets/images/cyclonedx-logo.svg'
 import AboutDialog from '@/components/layout/AboutDialog.vue'
 
-declare const __APP_VERSION__: string
+// __APP_VERSION__ is declared globally in src/env.d.ts (Vite define).
 const appVersion = __APP_VERSION__
 
 const { t } = useI18n()

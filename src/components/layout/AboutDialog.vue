@@ -2,7 +2,7 @@
 import { ElDialog, ElDivider } from 'element-plus'
 import cyclonedxLogo from '@/assets/images/cyclonedx-logo.svg'
 
-declare const __APP_VERSION__: string
+// __APP_VERSION__ is declared globally in src/env.d.ts (Vite define).
 const appVersion = __APP_VERSION__
 
 defineProps<{
