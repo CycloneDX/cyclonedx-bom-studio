@@ -241,14 +241,20 @@ const handleCancel = () => {
           />
         </ElFormItem>
 
-        <!-- Trust Boundary -->
+        <!-- Trust Boundary. Schema name is `x-trust-boundary`
+             (extension prefix + kebab-case); bracket notation is
+             required because dot syntax cannot reference a property
+             name containing a hyphen. Earlier versions used a
+             camelCase `trustBoundary` here, which produced BOMs that
+             failed schema validation; same root cause as the
+             `mime-type` regression in #145. -->
         <ElFormItem>
           <template #label>
             <TooltipLabel :label="t('service.trustBoundary')" schemaPath="service.x-trust-boundary" />
           </template>
           <ElSwitch
-            :model-value="service.trustBoundary || false"
-            @update:model-value="updateField('trustBoundary', $event)"
+            :model-value="service['x-trust-boundary'] || false"
+            @update:model-value="updateField('x-trust-boundary', $event)"
           />
         </ElFormItem>
 

@@ -346,16 +346,20 @@ const handleCancel = () => {
           />
         </ElFormItem>
 
-        <!-- MIME Type -->
+        <!-- MIME Type. Schema name is `mime-type` (kebab-case); bracket
+             notation is required because dot syntax cannot reference a
+             property name containing a hyphen. Earlier versions used a
+             camelCase `mimeType` here, which produced BOMs that failed
+             schema validation; see issue #145. -->
         <ElFormItem>
           <template #label>
             <TooltipLabel :label="t('component.mimeType')" schemaPath="component.mime-type" />
           </template>
           <ElInput
-            :model-value="component.mimeType"
+            :model-value="component['mime-type']"
             :placeholder="t('component.mimeTypePlaceholder')"
             class="component-editor__input"
-            @update:model-value="updateField('mimeType', $event)"
+            @update:model-value="updateField('mime-type', $event)"
           />
         </ElFormItem>
 
