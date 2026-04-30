@@ -191,7 +191,18 @@ export const useBomStore = defineStore('bom', () => {
       ? (isSigned ? sanitized.services : sanitized.services.slice(0, MAX_COMPONENT_COUNT))
       : []
 
+    // Pass-through-by-default construction: spread the source first so
+    // every CycloneDX 1.6 / 1.7 property the schema allows survives a
+    // round trip, including fields BOM Studio does not currently surface
+    // in dedicated editors (issue #146 was filed against
+    // metadata.distribution being silently dropped on save). Named
+    // overrides below normalize or default the subset of fields the
+    // editor needs to be able to dereference safely (`bom.metadata.X`,
+    // `bom.components`, etc.) and enforce the constants (`bomFormat`,
+    // `specVersion`) regardless of what was on the wire. Anything the
+    // overrides do not touch flows through unchanged.
     bom.value = {
+      ...sanitized,
       bomFormat: 'CycloneDX', // Always enforce correct format
       specVersion,
       serialNumber: sanitized.serialNumber || `urn:uuid:${uuidv4()}`,
@@ -200,10 +211,15 @@ export const useBomStore = defineStore('bom', () => {
       // it exists, and provide an empty object when it doesn't so that
       // editor consumers can read `bom.metadata.X` safely. The empty
       // object is later stripped on export when it was not part of the
-      // original root key set (see bomForExport above).
+      // original root key set (see bomForExport above). For unsigned
+      // imports, spread the source metadata first so unknown spec
+      // fields (distribution, manufacture, anything new in 1.7+) pass
+      // through; the named overrides only normalize editor-required
+      // fields after the spread.
       metadata: isSigned
         ? (sanitized.metadata ?? {})
         : {
+          ...(sanitized.metadata ?? {}),
           timestamp: sanitized.metadata?.timestamp || '',
           authors: Array.isArray(sanitized.metadata?.authors) ? sanitized.metadata.authors : [],
           supplier: sanitized.metadata?.supplier || null,
@@ -231,10 +247,6 @@ export const useBomStore = defineStore('bom', () => {
       citations: Array.isArray(sanitized.citations) ? sanitized.citations : [],
       declarations: sanitized.declarations || {},
       properties: Array.isArray(sanitized.properties) ? sanitized.properties : [],
-      // Preserve any root-level JSF signature attached to the imported
-      // BOM. Issue #123: prior versions silently dropped this on import,
-      // which produced an unsigned export on a no-op save.
-      ...(sanitized.signature !== undefined ? { signature: sanitized.signature } : {})
     }
     // Snapshot which root keys the source actually carried so that
     // `bomForExport` can drop empty editor-added phantoms (e.g. a

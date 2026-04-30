@@ -88,7 +88,17 @@
     "postBuild": "Nach-Build",
     "operations": "Betrieb",
     "discovery": "Erkennung",
-    "decommission": "Außerbetriebnahme"
+    "decommission": "Außerbetriebnahme",
+    "distributionConstraints": "Verteilungsbeschränkungen",
+    "tlp": {
+      "label": "TLP-Klassifizierung",
+      "placeholder": "TLP-Klassifizierung auswählen",
+      "CLEAR": "CLEAR (keine Einschränkungen)",
+      "GREEN": "GREEN (nur innerhalb der Community)",
+      "AMBER": "AMBER (eingeschränkte Weitergabe, Organisation und Kunden)",
+      "AMBER_AND_STRICT": "AMBER+STRICT (eingeschränkte Weitergabe, nur Organisation)",
+      "RED": "RED (nur namentlich benannte Empfänger)"
+    }
   },
   "component": {
     "title": "Komponenten",

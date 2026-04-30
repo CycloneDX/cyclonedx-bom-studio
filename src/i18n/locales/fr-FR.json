@@ -88,7 +88,17 @@
     "postBuild": "Post-construction",
     "operations": "Opérations",
     "discovery": "Découverte",
-    "decommission": "Décommissionnement"
+    "decommission": "Décommissionnement",
+    "distributionConstraints": "Contraintes de diffusion",
+    "tlp": {
+      "label": "Classification TLP",
+      "placeholder": "Sélectionner une classification TLP",
+      "CLEAR": "CLEAR (aucune restriction)",
+      "GREEN": "GREEN (partage interne à la communauté)",
+      "AMBER": "AMBER (diffusion limitée, organisation et clients)",
+      "AMBER_AND_STRICT": "AMBER+STRICT (diffusion limitée, organisation uniquement)",
+      "RED": "RED (destinataires nommés uniquement)"
+    }
   },
   "component": {
     "title": "Composants",

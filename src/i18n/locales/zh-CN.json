@@ -88,7 +88,17 @@
     "postBuild": "后构建",
     "operations": "运维",
     "discovery": "发现",
-    "decommission": "退役"
+    "decommission": "退役",
+    "distributionConstraints": "分发限制",
+    "tlp": {
+      "label": "TLP 分级",
+      "placeholder": "选择 TLP 分级",
+      "CLEAR": "CLEAR（无限制）",
+      "GREEN": "GREEN（仅限社区共享）",
+      "AMBER": "AMBER（有限披露，组织内部及客户）",
+      "AMBER_AND_STRICT": "AMBER+STRICT（有限披露，仅组织内部）",
+      "RED": "RED（仅限指定接收者）"
+    }
   },
   "component": {
     "title": "组件",

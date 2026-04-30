@@ -147,7 +147,27 @@ const ROOT_FEATURES: FeatureGate[] = [
   { key: 'formulation', minVersion: '1.5' },
   { key: 'citations', minVersion: '1.7' },
   { key: 'declarations', minVersion: '1.7' },
+  // metadata.distributionConstraints carries the BOM's TLP classification.
+  // Schema-defined since 1.7 (issue #146 reported it as missing in the UI).
+  { key: 'distributionConstraints', minVersion: '1.7' },
 ]
+
+/**
+ * TLP classifications enumerated in the CycloneDX 1.7 schema's
+ * `tlpClassification` definition. Order matches the schema enum so
+ * the dropdown reads CLEAR -> RED in the same direction as the spec.
+ * Default at the schema level is `CLEAR`; the editor offers an empty
+ * option so users can also express "no constraint declared".
+ */
+export const TLP_CLASSIFICATIONS = [
+  'CLEAR',
+  'GREEN',
+  'AMBER',
+  'AMBER_AND_STRICT',
+  'RED',
+] as const
+
+export type TlpClassification = typeof TLP_CLASSIFICATIONS[number]
 
 export function useSpecVersionGating() {
   const bomStore = useBomStore()
@@ -176,6 +196,9 @@ export function useSpecVersionGating() {
   /** Whether declarations feature is supported */
   const supportsDeclarations = computed(() => versionAtLeast(specVersion.value, '1.7'))
 
+  /** Whether metadata.distributionConstraints (TLP) is supported (v1.7+) */
+  const supportsDistributionConstraints = computed(() => versionAtLeast(specVersion.value, '1.7'))
+
   /** Whether formulation root-level feature is supported */
   const supportsFormulation = computed(() => versionAtLeast(specVersion.value, '1.5'))
 
@@ -199,6 +222,7 @@ export function useSpecVersionGating() {
     availableExtRefTypes,
     supportsCitations,
     supportsDeclarations,
+    supportsDistributionConstraints,
     supportsFormulation,
     supportsCryptoAssets,
     supportsMLAndDataTypes,

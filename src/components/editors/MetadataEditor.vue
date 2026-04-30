@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { ElForm, ElFormItem, ElInput, ElButton, ElCheckboxGroup, ElCheckbox, ElDivider } from 'element-plus'
+import { ElForm, ElFormItem, ElInput, ElButton, ElCheckboxGroup, ElCheckbox, ElDivider, ElSelect, ElOption } from 'element-plus'
 import { Refresh } from '@element-plus/icons-vue'
 import { useBomStore } from '@/stores/bomStore'
 import { ElMessage } from 'element-plus'
@@ -12,12 +12,56 @@ import OrganizationForm from '@/components/shared/OrganizationForm.vue'
 import TooltipLabel from '@/components/shared/TooltipLabel.vue'
 import ViewSpinner from '@/components/shared/ViewSpinner.vue'
 import { useViewLoading, useViewLoadingAsync } from '@/composables/useViewLoading'
+import { useSpecVersionGating, TLP_CLASSIFICATIONS } from '@/composables/useSpecVersionGating'
 
 await useViewLoadingAsync()
 const { ready } = useViewLoading()
 
 const { t } = useI18n()
 const bomStore = useBomStore()
+const { supportsDistributionConstraints } = useSpecVersionGating()
+
+// Translation lookup for the five TLP enum values. The CycloneDX schema
+// uses uppercase identifiers (CLEAR, GREEN, AMBER, AMBER_AND_STRICT,
+// RED); the i18n strings render the human-friendly label and a short
+// description sourced from the `meta:enum` block in bom-1.7.schema.json.
+const tlpOptions = TLP_CLASSIFICATIONS.map(value => ({
+  value,
+  label: t(`metadata.tlp.${value}`),
+}))
+
+/**
+ * Two-way binding for `metadata.distributionConstraints.tlp`.
+ *
+ * - get: returns the current value or '' when unset, so ElSelect can
+ *   render a clean placeholder instead of "undefined".
+ * - set: writes through `markModified` and prunes the wrapper object
+ *   when the user clears the selection so the saved JSON does not
+ *   carry an empty `distributionConstraints: {}` payload.
+ */
+const tlp = computed({
+  get: () => (bomStore.bom.metadata?.distributionConstraints?.tlp as string | undefined) ?? '',
+  set: (value: string) => {
+    if (!bomStore.bom.metadata) bomStore.bom.metadata = {}
+    if (!value) {
+      // Clear selection: remove the field entirely so JCS canonical
+      // bytes do not change when the user toggles the dropdown back
+      // to its initial unset state.
+      if (bomStore.bom.metadata.distributionConstraints) {
+        delete bomStore.bom.metadata.distributionConstraints.tlp
+        if (Object.keys(bomStore.bom.metadata.distributionConstraints).length === 0) {
+          delete bomStore.bom.metadata.distributionConstraints
+        }
+      }
+    } else {
+      if (!bomStore.bom.metadata.distributionConstraints) {
+        bomStore.bom.metadata.distributionConstraints = {}
+      }
+      bomStore.bom.metadata.distributionConstraints.tlp = value
+    }
+    bomStore.markModified()
+  },
+})
 
 const timestamp = computed({
   get: () => bomStore.bom.metadata.timestamp,
@@ -217,6 +261,35 @@ const updateSubjectComponent = (field: string, value: any) => {
         </div>
 
         <ElDivider />
+
+        <!-- Distribution Constraints (TLP) Section. CycloneDX 1.7+. -->
+        <div v-if="supportsDistributionConstraints" class="metadata-editor__section">
+          <h3 class="metadata-editor__section-title">
+            <TooltipLabel :label="t('metadata.distributionConstraints')" schemaPath="metadata.distributionConstraints" />
+          </h3>
+          <ElForm label-width="120px" class="metadata-editor__form">
+            <ElFormItem>
+              <template #label>
+                <TooltipLabel :label="t('metadata.tlp.label')" schemaPath="metadata.distributionConstraints.tlp" />
+              </template>
+              <ElSelect
+                v-model="tlp"
+                clearable
+                :placeholder="t('metadata.tlp.placeholder')"
+                class="metadata-editor__input"
+              >
+                <ElOption
+                  v-for="opt in tlpOptions"
+                  :key="opt.value"
+                  :label="opt.label"
+                  :value="opt.value"
+                />
+              </ElSelect>
+            </ElFormItem>
+          </ElForm>
+        </div>
+
+        <ElDivider v-if="supportsDistributionConstraints" />
 
         <!-- Manufacturer Section -->
         <div class="metadata-editor__section">

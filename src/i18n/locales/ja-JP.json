@@ -88,7 +88,17 @@
     "postBuild": "ビルド後",
     "operations": "運用",
     "discovery": "検出",
-    "decommission": "廃止"
+    "decommission": "廃止",
+    "distributionConstraints": "配布制約",
+    "tlp": {
+      "label": "TLP 分類",
+      "placeholder": "TLP 分類を選択",
+      "CLEAR": "CLEAR (制限なし)",
+      "GREEN": "GREEN (コミュニティ内のみ共有可)",
+      "AMBER": "AMBER (限定開示、組織内および顧客)",
+      "AMBER_AND_STRICT": "AMBER+STRICT (限定開示、組織内のみ)",
+      "RED": "RED (指名された受信者のみ)"
+    }
   },
   "component": {
     "title": "コンポーネント",

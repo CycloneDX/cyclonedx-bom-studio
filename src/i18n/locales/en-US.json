@@ -114,7 +114,17 @@
     "postBuild": "Post-Build",
     "operations": "Operations",
     "discovery": "Discovery",
-    "decommission": "Decommission"
+    "decommission": "Decommission",
+    "distributionConstraints": "Distribution Constraints",
+    "tlp": {
+      "label": "TLP Classification",
+      "placeholder": "Select a TLP classification",
+      "CLEAR": "CLEAR (no restrictions)",
+      "GREEN": "GREEN (community sharing only)",
+      "AMBER": "AMBER (limited disclosure, organization and clients)",
+      "AMBER_AND_STRICT": "AMBER+STRICT (limited disclosure, organization only)",
+      "RED": "RED (named recipients only)"
+    }
   },
   "component": {
     "title": "Components",

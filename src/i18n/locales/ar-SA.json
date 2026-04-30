@@ -88,7 +88,17 @@
     "postBuild": "ما بعد البناء",
     "operations": "العمليات",
     "discovery": "الاكتشاف",
-    "decommission": "إيقاف التشغيل"
+    "decommission": "إيقاف التشغيل",
+    "distributionConstraints": "قيود التوزيع",
+    "tlp": {
+      "label": "تصنيف TLP",
+      "placeholder": "اختر تصنيف TLP",
+      "CLEAR": "CLEAR (بدون قيود)",
+      "GREEN": "GREEN (مشاركة داخل المجتمع فقط)",
+      "AMBER": "AMBER (إفصاح محدود، المؤسسة والعملاء)",
+      "AMBER_AND_STRICT": "AMBER+STRICT (إفصاح محدود، المؤسسة فقط)",
+      "RED": "RED (المستلمون المسمَّون فقط)"
+    }
   },
   "component": {
     "title": "المكونات",
