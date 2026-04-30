@@ -9,7 +9,9 @@ import ViewSpinner from '@/components/shared/ViewSpinner.vue'
 import { useBomStore } from '@/stores/bomStore'
 import { useUiStore } from '@/stores/uiStore'
 import { useValidationStore } from '@/stores/validationStore'
-import { ElMessage } from 'element-plus'
+import { useSignatureStore, SignatureSaveBlocked } from '@/stores/signatureStore'
+import { SignKeyError, SignAlgorithmError } from '@/utils/jsfSignature'
+import { ElMessage, ElMessageBox } from 'element-plus'
 import { downloadBomAsJson, loadBomFromFile } from '@/utils/bomFileHandler'
 import { loadLocaleMessages } from '@/i18n'
 
@@ -18,6 +20,7 @@ const { locale } = useI18n()
 const bomStore = useBomStore()
 const uiStore = useUiStore()
 const validationStore = useValidationStore()
+const signatureStore = useSignatureStore()
 
 const isRtl = computed(() => uiStore.locale === 'ar-SA')
 
@@ -58,6 +61,7 @@ const handleNewBom = () => {
     }
   }
   bomStore.createNewBom()
+  signatureStore.clear()
   router.push({ name: 'Dashboard' })
 }
 
@@ -66,6 +70,10 @@ const handleOpenBom = async () => {
   try {
     const bomJson = await loadBomFromFile()
     if (bomJson) {
+      // Capture signature baselines BEFORE bomStore.loadBom so the
+      // baseline reflects on-disk canonical bytes. captureBaseline is
+      // a no-op when the imported BOM has no signatures.
+      await signatureStore.captureBaseline(bomJson)
       const result = bomStore.loadBom(bomJson)
       if (result?.converted) {
         const wasVersion = result.originalVersion
@@ -77,6 +85,17 @@ const handleOpenBom = async () => {
           showClose: true
         })
       }
+      if (signatureStore.records.length > 0) {
+        const allValid = signatureStore.records.every(r => r.importVerify.valid)
+        ElMessage({
+          message: allValid
+            ? `Detected ${signatureStore.records.length} signature(s) — all verified against their embedded keys. They will be preserved on save unless you edit a signed scope.`
+            : `Detected ${signatureStore.records.length} signature(s); some failed to verify against their embedded keys. They will be preserved on save unless you edit a signed scope. See the Signatures view.`,
+          type: allValid ? 'success' : 'warning',
+          duration: 8000,
+          showClose: true
+        })
+      }
       router.push({ name: 'Dashboard' })
     }
   } catch (error) {
@@ -85,14 +104,96 @@ const handleOpenBom = async () => {
 }
 
 // Handle saving BOM
-const handleSaveBom = () => {
+const handleSaveBom = async () => {
   try {
-    const bomForExport = bomStore.bomForExport
-    downloadBomAsJson(bomForExport)
+    const baseExport = bomStore.bomForExport
+    let toWrite: any
+    // Scopes that were resigned (or freshly signed) by applyForSave.
+    // Empty when the BOM was unsigned, when the user chose to strip
+    // signatures, or when nothing changed since import.
+    let resigned: Awaited<ReturnType<typeof signatureStore.applyForSave>>['resigned'] = []
+    try {
+      const result = await signatureStore.applyForSave(baseExport)
+      toWrite = result.draft
+      resigned = result.resigned
+    } catch (e) {
+      if (e instanceof SignatureSaveBlocked) {
+        const action = await ElMessageBox.confirm(
+          `Signed scope "${e.scopeLabel}" was modified, but no signing key is configured. Configure a key to resign, or strip signatures and save unsigned.`,
+          'Signatures need attention',
+          {
+            confirmButtonText: 'Configure key',
+            cancelButtonText: 'Strip and save unsigned',
+            distinguishCancelAndClose: true,
+            type: 'warning'
+          }
+        ).catch(reason => reason as 'cancel' | 'close')
+
+        if (action === 'confirm') {
+          router.push({ name: 'Signatures' })
+          return
+        }
+        if (action === 'cancel') {
+          // Strip every signature in the export and save unsigned.
+          toWrite = stripAllSignatures(baseExport)
+          ElMessage.warning('Saved without signatures. Edit invalidated the original signatures.')
+        } else {
+          // closed → cancel save entirely
+          return
+        }
+      } else if (e instanceof SignKeyError || e instanceof SignAlgorithmError) {
+        // PEM parse / key-algorithm mismatch / unsupported algorithm.
+        // Surface the underlying message verbatim — the helpers in
+        // jsfSignature.ts already format these for end users.
+        ElMessage.error({
+          message: e.message,
+          duration: 10000,
+          showClose: true,
+        })
+        return
+      } else {
+        throw e
+      }
+    }
+    downloadBomAsJson(toWrite)
+    // After a successful download, fold the just-written signatures
+    // back into the in-memory BOM and into the signature store records
+    // so the JSON Source view, bomForExport, and the status bar all
+    // reflect the file the user just saved. Without these two calls
+    // the status bar would keep reporting the import-time baseline
+    // ("0/1 ok") and the next save would needlessly resign every
+    // scope again.
+    if (resigned.length > 0) {
+      bomStore.applySignaturesAtPaths(
+        resigned.map(r => ({ path: r.path, signature: (r.signedEnvelope as any).signature })),
+      )
+      await signatureStore.commitResigned(resigned)
+    }
     bomStore.markSaved()
   } catch (error) {
     console.error('Error saving BOM:', error)
+    ElMessage.error('Save failed. See console for details.')
   }
+}
+
+/**
+ * Walk the export object and remove every JSF `signature` property.
+ * Used as the "strip and save unsigned" fallback when the user
+ * declines to configure a signing key after invalidating signatures.
+ */
+function stripAllSignatures(bom: any): any {
+  // JSON round-trip rather than structuredClone for the same reason
+  // signatureStore.applyForSave uses one: the input is a Vue reactive
+  // proxy and structuredClone rejects proxy-backed arrays.
+  const cloned = JSON.parse(JSON.stringify(bom))
+  const visit = (node: any) => {
+    if (!node || typeof node !== 'object') return
+    if (Array.isArray(node)) { node.forEach(visit); return }
+    if ('signature' in node) delete node.signature
+    for (const v of Object.values(node)) visit(v)
+  }
+  visit(cloned)
+  return cloned
 }
 
 // Handle BOM validation
@@ -119,16 +220,23 @@ const handleValidateBom = async () => {
 
       <main class="main-content">
         <div class="content-wrapper">
-          <router-view v-slot="{ Component }">
-            <Suspense>
-              <template #default>
-                <component :is="Component" />
-              </template>
-              <template #fallback>
-                <ViewSpinner />
-              </template>
-            </Suspense>
-          </router-view>
+          <!--
+            Order matters: <Suspense> must be the OUTER element, not
+            inside a `<router-view v-slot>`. Vue Router 5's v-slot
+            renderer feeds extra bookkeeping vnodes (transition
+            placeholder + matched component) into whatever it wraps,
+            which trips Vue's "<Suspense> slots expect a single root
+            node" warning when <Suspense> is the wrappee. Putting
+            <router-view> as the single child of <Suspense> keeps the
+            default slot to one vnode per navigation while still using
+            <Suspense> to drive the lazy-route fallback spinner.
+          -->
+          <Suspense>
+            <router-view />
+            <template #fallback>
+              <ViewSpinner />
+            </template>
+          </Suspense>
         </div>
       </main>
     </div>

@@ -253,7 +253,11 @@ export function useBomStats() {
 
   // --- Overall summary ---
   const bomSummary = computed(() => ({
-    hasMetadata: !!(bomStore.bom.metadata.timestamp || bomStore.bom.metadata.authors?.length),
+    // Metadata is optional in CycloneDX (absent entirely on minimal BOMs
+    // such as the cyclonedx.org "authenticity verification" sample).
+    // Guard with optional chaining so the dashboard does not crash on
+    // signed imports that omit the metadata block.
+    hasMetadata: !!(bomStore.bom.metadata?.timestamp || bomStore.bom.metadata?.authors?.length),
     hasComponents: bomStore.bom.components.length > 0,
     hasServices: bomStore.bom.services.length > 0,
     hasDependencies: bomStore.bom.dependencies.length > 0,

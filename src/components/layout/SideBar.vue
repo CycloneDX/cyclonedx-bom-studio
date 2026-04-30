@@ -14,18 +14,21 @@ import {
   Collection,
   ChatDotRound,
   Stamp,
+  Lock,
   List,
   DArrowLeft,
   DArrowRight,
 } from '@element-plus/icons-vue'
 import { useBomStore } from '@/stores/bomStore'
 import { useUiStore } from '@/stores/uiStore'
+import { useSignatureStore } from '@/stores/signatureStore'
 import { useSpecVersionGating } from '@/composables/useSpecVersionGating'
 
 const { t } = useI18n()
 const router = useRouter()
 const bomStore = useBomStore()
 const uiStore = useUiStore()
+const signatureStore = useSignatureStore()
 const { supportsCitations } = useSpecVersionGating()
 
 const isCollapsed = computed(() => uiStore.sidebarCollapsed)
@@ -101,6 +104,14 @@ const navItems = computed(() => [
     path: '/citations',
     badge: bomStore.citationCount,
   }] : []),
+  {
+    id: 'signatures',
+    label: t('nav.signatures'),
+    icon: Lock,
+    path: '/signatures',
+    // Show the count of detected signed scopes; null means no badge.
+    badge: signatureStore.records.length > 0 ? signatureStore.records.length : null as number | null,
+  },
 ])
 
 const footerItems = computed(() => [

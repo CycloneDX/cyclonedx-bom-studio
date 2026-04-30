@@ -67,7 +67,16 @@ html.dark {
   --el-mask-color-extra-light: rgba(0, 0, 0, 0.3);
 }
 
-// Plain primary buttons: fully transparent background, blue border + text
+// Plain primary buttons: fully transparent background, blue border + text.
+//
+// Two-tier override needed because Element Plus's @mixin button-plain in
+// node_modules/element-plus/theme-chalk/src/mixins/_button.scss does
+// two different things: the active state is driven by CSS variables
+// (--el-button-bg-color etc.), but the disabled state writes the
+// background-color, color, and border-color *as direct properties* on
+// .is-plain.is-disabled. CSS variable overrides do not reach those
+// properties, so we have to re-declare them explicitly. Same story for
+// the success-plain block below.
 .el-button--primary.is-plain {
   --el-button-bg-color: transparent;
   --el-button-border-color: #{$blue-500};
@@ -78,6 +87,18 @@ html.dark {
   --el-button-active-bg-color: transparent;
   --el-button-active-border-color: #{$blue-600};
   --el-button-active-text-color: #{$blue-600};
+}
+
+// Disabled state for plain primary: override Element Plus's hard-coded
+// `background-color: var(--el-color-primary-light-9)` etc. with our own
+// transparent-faded look so the dark theme stays consistent.
+.el-button--primary.is-plain.is-disabled,
+.el-button--primary.is-plain.is-disabled:hover,
+.el-button--primary.is-plain.is-disabled:focus,
+.el-button--primary.is-plain.is-disabled:active {
+  background-color: transparent;
+  border-color: #{rgba($blue-500, 0.35)};
+  color: #{rgba($blue-500, 0.45)};
 }
 
 // Icon-only buttons: ensure square aspect ratio
@@ -97,4 +118,15 @@ html.dark {
   --el-button-active-bg-color: transparent;
   --el-button-active-border-color: #{color.adjust($green-500, $lightness: -10%)};
   --el-button-active-text-color: #{color.adjust($green-500, $lightness: -10%)};
+}
+
+// Disabled state for plain success: override Element Plus's hard-coded
+// disabled properties (see comment on the plain primary block above).
+.el-button--success.is-plain.is-disabled,
+.el-button--success.is-plain.is-disabled:hover,
+.el-button--success.is-plain.is-disabled:focus,
+.el-button--success.is-plain.is-disabled:active {
+  background-color: transparent;
+  border-color: #{rgba($green-500, 0.35)};
+  color: #{rgba($green-500, 0.45)};
 }

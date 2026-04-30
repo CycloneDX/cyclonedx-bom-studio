@@ -7,10 +7,27 @@ import {
 } from '@element-plus/icons-vue'
 import { useBomStore } from '@/stores/bomStore'
 import { useValidationStore } from '@/stores/validationStore'
+import { useSignatureStore } from '@/stores/signatureStore'
 import InfoTip from '@/components/shared/InfoTip.vue'
 
 const bomStore = useBomStore()
 const validationStore = useValidationStore()
+const signatureStore = useSignatureStore()
+
+// Compact summary of the signature situation. Mirrors statusFor() in
+// the store so the badge agrees with the Signatures view at a glance.
+const signatureSummary = computed(() => {
+  const total = signatureStore.records.length
+  if (total === 0) return null
+  let preserved = 0
+  let dirty = 0
+  for (const rec of signatureStore.records) {
+    const status = signatureStore.statusFor(rec, bomStore.bomForExport)
+    if (status === 'preserved-valid' || status === 'preserved-unverified') preserved++
+    else dirty++
+  }
+  return { total, preserved, dirty }
+})
 
 const hasErrors = computed(() => validationStore.errorCount > 0)
 const hasWarnings = computed(() => validationStore.warningCount > 0)
@@ -84,8 +101,24 @@ const handleStatusClick = () => {
       </div>
     </div>
 
-    <!-- Right: Modified/Saved + Version -->
+    <!-- Right: Signatures + Modified/Saved + Version -->
     <div class="status-section status-right">
+      <div v-if="signatureSummary" class="status-item">
+        <span
+          class="status-badge"
+          :class="{
+            'sig-clean': signatureSummary.dirty === 0,
+            'sig-dirty': signatureSummary.dirty > 0
+          }"
+          :title="signatureSummary.dirty === 0
+            ? `${signatureSummary.preserved} signature(s) preserved`
+            : `${signatureSummary.dirty} signature(s) need resigning, ${signatureSummary.preserved} preserved`"
+        >
+          {{ signatureSummary.dirty === 0
+            ? `Signed (${signatureSummary.preserved})`
+            : `Signed (${signatureSummary.preserved}/${signatureSummary.total} ok)` }}
+        </span>
+      </div>
       <div class="status-item">
         <span
           class="status-badge"
@@ -268,6 +301,16 @@ const handleStatusClick = () => {
   &.saved {
     background: rgba($green-500, 0.15);
     color: $green-500;
+  }
+
+  &.sig-clean {
+    background: rgba($green-500, 0.15);
+    color: $green-500;
+  }
+
+  &.sig-dirty {
+    background: rgba($amber-500, 0.15);
+    color: $amber-500;
   }
 }
 

@@ -73,6 +73,12 @@ const routes: RouteRecordRaw[] = [
     meta: { label: 'nav.properties' }
   },
   {
+    path: '/signatures',
+    name: 'Signatures',
+    component: () => import('@/components/editors/SignatureEditor.vue'),
+    meta: { label: 'nav.signatures' }
+  },
+  {
     path: '/json-source',
     name: 'JsonSource',
     component: () => import('@/components/editors/JsonSourceEditor.vue'),
