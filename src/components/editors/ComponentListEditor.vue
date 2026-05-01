@@ -271,7 +271,20 @@ const handleSelectionChange = (selection: any[]) => {
         </div>
       </EditorCard>
 
+      <!--
+        :key forces Vue to unmount and remount the entire editor (and
+        every child input it composes) when the user switches to a
+        different component. Without this, child editors that copy
+        their props into local state at script-setup time (HashEditor,
+        TagInput, OrganizationForm, PropertyEditor, etc.) keep the
+        previous component's data and bleed it into the next one.
+        Reported as #144. Any new dialog-style editor added in this
+        codebase MUST follow the same pattern: bind :key to a stable
+        per-item identity (typically `bom-ref`) so the subtree gets a
+        fresh mount on every selection change.
+      -->
       <ComponentEditor
+        :key="editingComponent?.['bom-ref'] ?? 'new'"
         :visible="editorVisible"
         :model-value="editingComponent"
         @update:model-value="editingComponent = $event"

@@ -278,12 +278,20 @@ const updateAnnotatorServiceField = (field: string, value: any) => {
         </div>
       </EditorCard>
 
-      <!-- Edit/Add Dialog -->
+      <!-- Edit/Add Dialog.
+        destroy-on-close ensures the dialog body (including
+        OrganizationForm and ContactForm sub-editors that copy their
+        props into local state at script-setup time) is unmounted on
+        close and rebuilt on next open. Without this, the prop-copy
+        anti-pattern in those shared editors causes the previous
+        annotation's annotator data to bleed into the next one. Same
+        root cause as #144 in the components list. -->
       <ElDialog
         :model-value="dialogVisible"
         :title="editingIndex >= 0 ? t('annotations.editAnnotation') : t('annotations.addAnnotation')"
         width="80%"
         :close-on-click-modal="false"
+        destroy-on-close
         @update:model-value="(val) => !val && cancelEdit()"
       >
       <div class="annotation-editor__dialog-body">

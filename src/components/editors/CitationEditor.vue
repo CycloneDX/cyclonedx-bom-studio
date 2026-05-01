@@ -319,13 +319,21 @@ const formatTimestamp = (ts: string): string => {
         <ElEmpty v-else :description="t('citations.noData')" />
       </template>
 
-      <!-- Add/Edit Citation Dialog -->
+      <!-- Add/Edit Citation Dialog.
+        destroy-on-close unmounts the dialog body on close so any
+        future shared sub-editor that copies its props into local
+        state at script-setup time (the #144 anti-pattern) gets a
+        fresh mount on the next open. CitationEditor's form fields
+        currently use direct v-model so are not affected today, but
+        adding destroy-on-close here preserves the safety contract
+        for any future contributor who drops a sub-editor in. -->
       <ElDialog
       v-model="dialogVisible"
       :title="editingIndex !== null ? t('citations.editCitation') : t('citations.addCitation')"
       width="600px"
       class="citation-editor__dialog"
       :close-on-click-modal="false"
+      destroy-on-close
     >
       <ElForm ref="citationFormRef" :model="form" :rules="citationFormRules" label-position="top" class="citation-editor__form">
         <!-- Timestamp -->
