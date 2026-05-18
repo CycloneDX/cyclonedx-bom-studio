@@ -8,10 +8,10 @@ const mockBomStore = {
   bom: {
     metadata: {
       timestamp: '2026-05-18T16:40:27Z',
-      authors: [{ name: 'Hanna Instruments' }],
-      supplier: { name: 'Hanna Instruments' },
-      manufacturer: { name: 'Hanna Instruments' },
-      component: { name: 'hi6000', version: '2.4.0', type: 'application' },
+      authors: [{ name: 'Example Manufacturer' }],
+      supplier: { name: 'Example Manufacturer' },
+      manufacturer: { name: 'Example Manufacturer' },
+      component: { name: 'example-product', version: '2.4.0', type: 'application' },
       lifecycles: [{ phase: 'operations' }],
       distributionConstraints: { tlp: 'AMBER_AND_STRICT' },
       tools: {
@@ -21,7 +21,7 @@ const mockBomStore = {
         services: [],
       },
       licenses: [
-        { license: { name: '(c) 2026 Endeavor Consulting Group, LLC.' } },
+        { license: { name: '(c) 2026 Example Organization' } },
       ],
       properties: [],
     },
@@ -86,6 +86,6 @@ describe('MetadataEditor', () => {
 
     const text = wrapper.text()
     expect(text).toContain('rdt version 1.0.33')
-    expect(text).toContain('(c) 2026 Endeavor Consulting Group, LLC.')
+    expect(text).toContain('(c) 2026 Example Organization')
   })
 })
