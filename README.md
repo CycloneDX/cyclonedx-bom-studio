@@ -1,3 +1,7 @@
+[![CI](https://github.com/CycloneDX/cyclonedx-bom-studio/actions/workflows/ci.yml/badge.svg)](https://github.com/CycloneDX/cyclonedx-bom-studio/actions/workflows/ci.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/7e5ecde3fded42c5a0913d2dff17a278)](https://app.codacy.com/gh/CycloneDX/cyclonedx-bom-studio/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade)
+
+
 # CycloneDX BOM Studio
 
 A visual editor for creating and managing [CycloneDX](https://cyclonedx.org/) Bills of Materials (BOMs). BOM Studio lets you build, edit, validate, and export CycloneDX BOMs through an intuitive browser-based interface — no command-line tools or manual JSON editing required.
