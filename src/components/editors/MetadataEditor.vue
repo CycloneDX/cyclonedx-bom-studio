@@ -89,6 +89,63 @@ const lifecycleOptions = [
   { label: t('metadata.decommission'), value: 'decommission' }
 ]
 
+const toolEntries = computed(() => {
+  const tools = bomStore.bom.metadata?.tools
+  if (!tools) return []
+
+  const entries: string[] = []
+  if (Array.isArray(tools.components)) {
+    for (const component of tools.components) {
+      const name = typeof component?.name === 'string' ? component.name.trim() : ''
+      const version = typeof component?.version === 'string' ? component.version.trim() : ''
+      const type = typeof component?.type === 'string' ? component.type.trim() : ''
+      const normalizedName = name.toLowerCase()
+      const normalizedVersion = version.toLowerCase()
+      const nameAlreadyContainsVersion = !!(
+        version &&
+        (normalizedName.includes(normalizedVersion) || normalizedName.includes(`v${normalizedVersion}`))
+      )
+      const details = [name, version && !nameAlreadyContainsVersion ? `v${version}` : '', type ? `(${type})` : ''].filter(Boolean).join(' ')
+      if (details) entries.push(details)
+    }
+  }
+
+  if (Array.isArray(tools.services)) {
+    for (const service of tools.services) {
+      const name = typeof service?.name === 'string' ? service.name.trim() : ''
+      const version = typeof service?.version === 'string' ? service.version.trim() : ''
+      const details = [`service: ${name || 'Unnamed service'}`, version ? `v${version}` : ''].filter(Boolean).join(' ')
+      entries.push(details)
+    }
+  }
+
+  return entries
+})
+
+const bomLicenseEntries = computed(() => {
+  const licenses = bomStore.bom.metadata?.licenses
+  if (!Array.isArray(licenses)) return []
+
+  const entries: string[] = []
+  for (const entry of licenses) {
+    if (typeof entry?.expression === 'string' && entry.expression.trim()) {
+      entries.push(entry.expression.trim())
+      continue
+    }
+
+    const license = entry?.license
+    if (!license || typeof license !== 'object') continue
+
+    const id = typeof license.id === 'string' ? license.id.trim() : ''
+    const name = typeof license.name === 'string' ? license.name.trim() : ''
+    const url = typeof license.url === 'string' ? license.url.trim() : ''
+    const details = [id || name, url ? `(${url})` : ''].filter(Boolean).join(' ')
+    if (details) entries.push(details)
+  }
+
+  return entries
+})
+
 const refreshTimestamp = () => {
   timestamp.value = new Date().toISOString()
   ElMessage.success(t('common.updated'))
@@ -311,6 +368,16 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.tools')" schemaPath="metadata.tools" />
           </h3>
           <p class="metadata-editor__info">{{ t('metadata.toolsInfo') }}</p>
+          <div v-if="toolEntries.length > 0" class="metadata-editor__items">
+            <div
+              v-for="(tool, index) in toolEntries"
+              :key="`tool-${index}`"
+              class="metadata-editor__item"
+            >
+              <p class="metadata-editor__summary">{{ tool }}</p>
+            </div>
+          </div>
+          <p v-else class="metadata-editor__empty">No tools added yet.</p>
         </div>
 
         <ElDivider />
@@ -321,6 +388,16 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.licenses')" schemaPath="metadata.licenses" />
           </h3>
           <p class="metadata-editor__info">{{ t('metadata.licensesInfo') }}</p>
+          <div v-if="bomLicenseEntries.length > 0" class="metadata-editor__items">
+            <div
+              v-for="(license, index) in bomLicenseEntries"
+              :key="`bom-license-${index}`"
+              class="metadata-editor__item"
+            >
+              <p class="metadata-editor__summary">{{ license }}</p>
+            </div>
+          </div>
+          <p v-else class="metadata-editor__empty">No BOM licenses added yet.</p>
         </div>
 
         <ElDivider />
@@ -422,6 +499,13 @@ const updateSubjectComponent = (field: string, value: any) => {
     background-color: rgba($accent-primary, 0.04);
     border-left: 2px solid $accent-primary;
     border-radius: 0 $radius-sm $radius-sm 0;
+  }
+
+  &__summary {
+    font-size: $text-sm;
+    color: $text-primary;
+    margin: 0;
+    word-break: break-word;
   }
 
   &__checkboxes {
