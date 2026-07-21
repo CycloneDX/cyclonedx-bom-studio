@@ -113,12 +113,12 @@ const removeAuthor = (index: number) => {
 }
 
 const updateSupplier = (supplier: any) => {
-  bomStore.bom.metadata.supplier = supplier
+  bomStore.bom.metadata.component.supplier = supplier
   bomStore.markModified()
 }
 
 const updateManufacturer = (manufacturer: any) => {
-  bomStore.bom.metadata.manufacturer = manufacturer
+  bomStore.bom.metadata.component.manufacturer = manufacturer
   bomStore.markModified()
 }
 
@@ -196,7 +196,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.supplier')" schemaPath="metadata.supplier" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata.supplier || {}"
+            :model-value="bomStore.bom.metadata?.component?.supplier || {}"
             :label="t('metadata.supplier')"
             @update:model-value="updateSupplier"
           />
@@ -297,7 +297,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.manufacturer')" schemaPath="metadata.manufacturer" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata.manufacturer || {}"
+            :model-value="bomStore.bom.metadata?.component?.manufacturer || {}"
             :label="t('metadata.manufacturer')"
             @update:model-value="updateManufacturer"
           />

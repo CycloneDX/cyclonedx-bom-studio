@@ -14,7 +14,7 @@ interface Contact {
 
 interface Organization {
   name?: string
-  urls?: string[]
+  url?: string[]
   contacts?: Contact[]
 }
 
@@ -36,7 +36,7 @@ const { t } = useI18n()
 
 const organization = reactive<Organization>({
   name: props.modelValue?.name || '',
-  urls: props.modelValue?.urls ? [...props.modelValue.urls] : [],
+  url: props.modelValue?.url ? [...props.modelValue.url] : [],
   contacts: props.modelValue?.contacts ? JSON.parse(JSON.stringify(props.modelValue.contacts)) : []
 })
 
