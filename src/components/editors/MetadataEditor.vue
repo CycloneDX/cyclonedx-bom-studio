@@ -196,7 +196,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.supplier')" schemaPath="metadata.supplier" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata?.component?.supplier || {}"
+            :model-value="bomStore.bom.metadata?.supplier || {}"
             :label="t('metadata.supplier')"
             @update:model-value="updateSupplier"
           />
@@ -240,6 +240,29 @@ const updateSubjectComponent = (field: string, value: any) => {
                 class="metadata-editor__input"
               />
             </ElFormItem>
+
+          <div class="metadata-editor__section">
+            <h3 class="metadata-editor__section-title">
+              <TooltipLabel :label="t('metadata.supplier')" schemaPath="metadata.supplier" />
+            </h3>
+            <OrganizationForm
+              :model-value="bomStore.bom.metadata?.component?.supplier || {}"
+              :label="t('metadata.supplier')"
+              @update:model-value="updateSupplier"
+            />
+          </div>
+
+          <div class="metadata-editor__section">
+            <h3 class="metadata-editor__section-title">
+              <TooltipLabel :label="t('metadata.manufacturer')" schemaPath="metadata.manufacturer" />
+            </h3>
+            <OrganizationForm
+              :model-value="bomStore.bom.metadata?.component?.manufacturer || {}"
+              :label="t('metadata.manufacturer')"
+              @update:model-value="updateManufacturer"
+            />
+          </div>
+
           </ElForm>
         </div>
 
@@ -297,7 +320,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.manufacturer')" schemaPath="metadata.manufacturer" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata?.component?.manufacturer || {}"
+            :model-value="bomStore.bom.metadata?.manufacturer || {}"
             :label="t('metadata.manufacturer')"
             @update:model-value="updateManufacturer"
           />

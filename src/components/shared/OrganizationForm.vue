@@ -46,23 +46,23 @@ const updateField = (field: keyof Organization, value: any) => {
 }
 
 const addUrl = () => {
-  if (!organization.urls) {
-    organization.urls = []
+  if (!organization.url) {
+    organization.url = []
   }
-  organization.urls.push('')
+  organization.url.push('')
   emitUpdate()
 }
 
 const removeUrl = (index: number) => {
-  if (organization.urls) {
-    organization.urls.splice(index, 1)
+  if (organization.url) {
+    organization.url.splice(index, 1)
     emitUpdate()
   }
 }
 
 const updateUrl = (index: number, value: string) => {
-  if (organization.urls) {
-    organization.urls[index] = value
+  if (organization.url) {
+    organization.url[index] = value
     emitUpdate()
   }
 }
@@ -116,8 +116,8 @@ const emitUpdate = () => {
         <AddButton size="small" @click="addUrl" />
       </div>
 
-      <div v-if="organization.urls && organization.urls.length > 0" class="organization-form__urls">
-        <div v-for="(url, index) in organization.urls" :key="`url-${index}`" class="organization-form__url-item">
+      <div v-if="organization.url && organization.url.length > 0" class="organization-form__urls">
+        <div v-for="(url, index) in organization.url" :key="`url-${index}`" class="organization-form__url-item">
           <ElInput
             :model-value="url"
             type="url"
