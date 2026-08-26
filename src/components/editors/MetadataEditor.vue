@@ -112,12 +112,28 @@ const removeAuthor = (index: number) => {
   bomStore.markModified()
 }
 
-const updateSupplier = (supplier: any) => {
+const updateMetadataSupplier = (supplier: any) => {
+  bomStore.bom.metadata.supplier = supplier
+  bomStore.markModified()
+}
+
+const updateMetadataManufacturer = (manufacturer: any) => {
+  bomStore.bom.metadata.manufacturer = manufacturer
+  bomStore.markModified()
+}
+
+const updateComponentSupplier = (supplier: any) => {
+  if (!bomStore.bom.metadata.component) {
+    bomStore.bom.metadata.component = {}
+  }
   bomStore.bom.metadata.component.supplier = supplier
   bomStore.markModified()
 }
 
-const updateManufacturer = (manufacturer: any) => {
+const updateComponentManufacturer = (manufacturer: any) => {
+  if (!bomStore.bom.metadata.component) {
+    bomStore.bom.metadata.component = {}
+  }
   bomStore.bom.metadata.component.manufacturer = manufacturer
   bomStore.markModified()
 }
@@ -198,7 +214,7 @@ const updateSubjectComponent = (field: string, value: any) => {
           <OrganizationForm
             :model-value="bomStore.bom.metadata?.supplier || {}"
             :label="t('metadata.supplier')"
-            @update:model-value="updateSupplier"
+            @update:model-value="updateMetadataSupplier"
           />
         </div>
 
@@ -248,7 +264,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <OrganizationForm
               :model-value="bomStore.bom.metadata?.component?.supplier || {}"
               :label="t('metadata.supplier')"
-              @update:model-value="updateSupplier"
+              @update:model-value="updateComponentSupplier"
             />
           </div>
 
@@ -259,7 +275,7 @@ const updateSubjectComponent = (field: string, value: any) => {
             <OrganizationForm
               :model-value="bomStore.bom.metadata?.component?.manufacturer || {}"
               :label="t('metadata.manufacturer')"
-              @update:model-value="updateManufacturer"
+              @update:model-value="updateComponentManufacturer"
             />
           </div>
 
@@ -322,7 +338,7 @@ const updateSubjectComponent = (field: string, value: any) => {
           <OrganizationForm
             :model-value="bomStore.bom.metadata?.manufacturer || {}"
             :label="t('metadata.manufacturer')"
-            @update:model-value="updateManufacturer"
+            @update:model-value="updateMetadataManufacturer"
           />
         </div>
 
