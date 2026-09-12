@@ -112,13 +112,29 @@ const removeAuthor = (index: number) => {
   bomStore.markModified()
 }
 
-const updateSupplier = (supplier: any) => {
+const updateMetadataSupplier = (supplier: any) => {
   bomStore.bom.metadata.supplier = supplier
   bomStore.markModified()
 }
 
-const updateManufacturer = (manufacturer: any) => {
+const updateMetadataManufacturer = (manufacturer: any) => {
   bomStore.bom.metadata.manufacturer = manufacturer
+  bomStore.markModified()
+}
+
+const updateComponentSupplier = (supplier: any) => {
+  if (!bomStore.bom.metadata.component) {
+    bomStore.bom.metadata.component = {}
+  }
+  bomStore.bom.metadata.component.supplier = supplier
+  bomStore.markModified()
+}
+
+const updateComponentManufacturer = (manufacturer: any) => {
+  if (!bomStore.bom.metadata.component) {
+    bomStore.bom.metadata.component = {}
+  }
+  bomStore.bom.metadata.component.manufacturer = manufacturer
   bomStore.markModified()
 }
 
@@ -196,9 +212,9 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.supplier')" schemaPath="metadata.supplier" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata.supplier || {}"
+            :model-value="bomStore.bom.metadata?.supplier || {}"
             :label="t('metadata.supplier')"
-            @update:model-value="updateSupplier"
+            @update:model-value="updateMetadataSupplier"
           />
         </div>
 
@@ -240,6 +256,29 @@ const updateSubjectComponent = (field: string, value: any) => {
                 class="metadata-editor__input"
               />
             </ElFormItem>
+
+          <div class="metadata-editor__section">
+            <h3 class="metadata-editor__section-title">
+              <TooltipLabel :label="t('metadata.supplier')" schemaPath="metadata.supplier" />
+            </h3>
+            <OrganizationForm
+              :model-value="bomStore.bom.metadata?.component?.supplier || {}"
+              :label="t('metadata.supplier')"
+              @update:model-value="updateComponentSupplier"
+            />
+          </div>
+
+          <div class="metadata-editor__section">
+            <h3 class="metadata-editor__section-title">
+              <TooltipLabel :label="t('metadata.manufacturer')" schemaPath="metadata.manufacturer" />
+            </h3>
+            <OrganizationForm
+              :model-value="bomStore.bom.metadata?.component?.manufacturer || {}"
+              :label="t('metadata.manufacturer')"
+              @update:model-value="updateComponentManufacturer"
+            />
+          </div>
+
           </ElForm>
         </div>
 
@@ -297,9 +336,9 @@ const updateSubjectComponent = (field: string, value: any) => {
             <TooltipLabel :label="t('metadata.manufacturer')" schemaPath="metadata.manufacturer" />
           </h3>
           <OrganizationForm
-            :model-value="bomStore.bom.metadata.manufacturer || {}"
+            :model-value="bomStore.bom.metadata?.manufacturer || {}"
             :label="t('metadata.manufacturer')"
-            @update:model-value="updateManufacturer"
+            @update:model-value="updateMetadataManufacturer"
           />
         </div>
 
